@@ -35,7 +35,7 @@ fun BottomNavBar(navController: NavController){
         ) {
             Icon(
                 modifier = Modifier
-                    .size(50.dp)
+                    .size(40.dp)
                     .clickable { navController.navigate(Screen.HomeScreen.route) },
                 tint = offWhite,
                 imageVector = Icons.Default.Home,
@@ -50,7 +50,7 @@ fun BottomNavBar(navController: NavController){
         ) {
             Icon(
                 modifier = Modifier
-                    .size(50.dp)
+                    .size(40.dp)
                     .clickable { navController.navigate(Screen.CreateRouteScreen.route) },
                 tint = offWhite,
                 imageVector = Icons.Default.Add,
@@ -65,7 +65,7 @@ fun BottomNavBar(navController: NavController){
         ) {
             Icon(
                 modifier = Modifier
-                    .size(50.dp)
+                    .size(40.dp)
                     .clickable { navController.navigate(Screen.SettingsScreen.route) },
                 tint = offWhite,
                 imageVector = Icons.Default.Settings,

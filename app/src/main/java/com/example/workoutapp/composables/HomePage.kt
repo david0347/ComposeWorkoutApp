@@ -117,7 +117,7 @@ fun DaysOfWeekButton(
         .size(70.dp)
         .clip(CircleShape)
         .background(lightBlue)
-        .border(width = 5.dp, color = darkBlue, shape = CircleShape)
+        .border(width = 2.dp, color = darkBlue, shape = CircleShape)
         .clickable { navController.navigate(Screen.DayOfWeekScreen.route) },
         contentAlignment = Alignment.Center
     ){
@@ -164,7 +164,7 @@ fun MainButtons(
             .clip(RoundedCornerShape(15.dp))
             .height(75.dp)
             .background(lightBlue)
-            .border(width = 5.dp, color = darkBlue, shape = RoundedCornerShape(15.dp))
+            .border(width = 2.dp, color = darkBlue, shape = RoundedCornerShape(15.dp))
             .clickable { navController.navigate(pageRoute) },
         contentAlignment = Alignment.Center
     ){
