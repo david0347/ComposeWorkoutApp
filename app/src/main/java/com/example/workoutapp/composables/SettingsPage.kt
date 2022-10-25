@@ -4,20 +4,26 @@ import android.content.Context
 import android.provider.Settings.Global
 import android.util.Log
 import android.view.View
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import com.example.workoutapp.RoutineDatabase
+import com.example.workoutapp.ui.theme.darkBlue
+import com.example.workoutapp.ui.theme.lightBlue
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -53,26 +59,42 @@ fun deleteTable(context: Context){
     Box(
         modifier = Modifier
             .fillMaxWidth()
+            //GlobalScope is a coroutine, Dispatchers.IO is a thread used for DB
             .clickable {
-                GlobalScope.launch { var count = dao.countRoutine()
+                GlobalScope.launch(Dispatchers.IO) { var count = dao.countRoutine()
                     Log.d("Database Size: ", count.toString())}
 
-            }
+            },
+        contentAlignment = Alignment.Center
     ){
-        Text(text = "Count Database")
+        Text(text = "Count Database (Temporary Button)")
     }
 
+    Spacer(Modifier.padding(top = 20.dp))
+
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable {
-                GlobalScope.launch {
-                    dao.deleteRoutine()
-                    dao.deleteWorkout()
-                }
-            }
-    ){
-        Text("Testing deletion")
+        modifier = Modifier.fillMaxWidth(),
+        contentAlignment = Alignment.Center
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(.7f)
+                .clip(RoundedCornerShape(15.dp))
+                .height(75.dp)
+                .background(lightBlue)
+                .border(width = 2.dp, color = darkBlue, shape = RoundedCornerShape(15.dp))
+                .clickable {
+                    //GlobalScope.launch is a coroutine which is needed
+                    //for a suspend function which is in dao
+                    GlobalScope.launch(Dispatchers.IO) {
+                        dao.deleteRoutine()
+                        dao.deleteWorkout()
+                    }
+                },
+            contentAlignment = Alignment.Center
+        ) {
+            Text("Delete All Records")
+        }
     }
 }
 

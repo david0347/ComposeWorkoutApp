@@ -15,5 +15,7 @@ data class Routine(
     //For dayOfCreation most likely change to Date type
     val dayOfCreation : String,
     //String for each day of the week
-    val dayAssigned: String
+    val dayAssigned : String,
+    //String that can be parsed for each workout name in routine
+    val workout : String
 )

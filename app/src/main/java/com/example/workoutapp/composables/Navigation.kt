@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.workoutapp.routes.Screen
+import com.example.workoutapp.viewModel.WorkoutState
 
 /*
 Navigation page to set up routes between all the composable pages
@@ -14,7 +15,7 @@ uses the navController to determine where to start.
 */
 
 @Composable
-fun Navigation(){
+fun Navigation(state : WorkoutState){
     //get the navigation information, rememberNavController returns NavHostController
     val navController = rememberNavController()
     //Getting context for the database(this works if you pass through the nav composables)
@@ -27,7 +28,7 @@ fun Navigation(){
         }
         //Create route screen composable
         composable(route = Screen.CreateRouteScreen.route){
-            CreateRouteScaffold(navController)
+            CreateRouteScaffold(navController, state)
         }
         //Statistics page screen composable
         composable(route = Screen.StatsScreen.route){

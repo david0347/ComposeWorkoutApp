@@ -9,7 +9,7 @@ import com.example.workoutapp.entities.RoutineDao
 import com.example.workoutapp.entities.Workout
 
 //Increase version if I alter the database
-@Database(entities = [Routine::class, Workout::class], version = 1)
+@Database(entities = [Routine::class, Workout::class], version = 2)
 abstract class RoutineDatabase : RoomDatabase() {
 
     abstract val routineDao : RoutineDao
@@ -24,7 +24,8 @@ abstract class RoutineDatabase : RoomDatabase() {
                     context.applicationContext,
                     RoutineDatabase::class.java,
                     "routine_db"
-                ).build().also {
+                ).fallbackToDestructiveMigration()
+                    .build().also {
                     INSTANCE = it
                 }
             }

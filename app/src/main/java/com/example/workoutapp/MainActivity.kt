@@ -4,9 +4,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.workoutapp.composables.Navigation
 import com.example.workoutapp.entities.Routine
 import com.example.workoutapp.entities.Workout
+import com.example.workoutapp.viewModel.WorkoutViewModel
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
@@ -17,11 +19,11 @@ class MainActivity : ComponentActivity() {
         val dao = RoutineDatabase.getInstance(this).routineDao
 
         val routines = listOf(
-            Routine("Chest Day", "1/1/1", "Monday"),
-            Routine("Leg Day", "1/2/1", "Tuesday"),
-            Routine("Arm Day", "1/3/1", "Wednesday"),
-            Routine("Back Day", "1/4/1", "Thursday"),
-            Routine("Shoulder Day", "1/5/1", "Friday")
+            Routine("Chest Day", "1/1/1", "Monday", "bench,Machine fly,dumbbell fly"),
+            Routine("Leg Day", "1/2/1", "Tuesday", "squat,leg press,step ups"),
+            Routine("Arm Day", "1/3/1", "Wednesday", "bench,curl,preacher "),
+            Routine("Back Day", "1/4/1", "Thursday", "deadlift,rows,pull ups"),
+            Routine("Shoulder Day", "1/5/1", "Friday", "military press,land mines,shoulder raise")
         )
 
         val workouts = listOf(
@@ -36,8 +38,11 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
+            val viewModel = viewModel<WorkoutViewModel>()
+
+            val state = viewModel.state
             //Call navigation to start home page
-            Navigation()
+            Navigation(state)
         }
     }
 }
