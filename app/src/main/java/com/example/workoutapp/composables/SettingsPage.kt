@@ -1,9 +1,13 @@
 package com.example.workoutapp.composables
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
+
 
 @Composable
 fun SettingsPageScaffold(navController: NavController){
@@ -16,4 +20,12 @@ fun SettingsPageScaffold(navController: NavController){
 @Composable
 fun Settings(){
     Header(text = "Settings")
+}
+
+@Composable
+fun deleteTable(){
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+    ){}
 }
