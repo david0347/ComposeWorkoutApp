@@ -37,12 +37,14 @@ class MainActivity : ComponentActivity() {
             workouts.forEach{dao.insertWorkout(it)}
         }
 
+        //Setting a single view model and state to be passed through
         setContent {
+            //View Model to pass through navigation and the rest of the composables
             val viewModel = viewModel<WorkoutViewModel>()
-
+            //state to pass through navigation and the rest of the composables
             val state = viewModel.state
             //Call navigation to start home page
-            Navigation(state)
+            Navigation(state, viewModel)
         }
     }
 }
