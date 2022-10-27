@@ -78,7 +78,7 @@ fun InfoColumn(state: WorkoutState, viewModel: WorkoutViewModel, context : Conte
         Spacer(Modifier.padding(top = 20.dp))
         WorkoutNames(state = state, onTextChange = viewModel::updateWorkoutNamesField)
         Spacer(Modifier.padding(top = 20.dp))
-        CreateRoutineButton(context)
+        CreateRoutineButton(context, state)
 
     }
 }
@@ -171,7 +171,7 @@ fun WorkoutNames(
 }
 
 @Composable
-fun CreateRoutineButton(context : Context){
+fun CreateRoutineButton(context : Context, state : WorkoutState){
     Box(
         modifier = Modifier.fillMaxWidth(),
         contentAlignment = Alignment.Center
@@ -184,7 +184,9 @@ fun CreateRoutineButton(context : Context){
                 .background(lightBlue)
                 .border(width = 2.dp, color = darkBlue, shape = RoundedCornerShape(15.dp))
                 .clickable {
-                    addToDatabase(context)
+                    GlobalScope.launch() {
+                        addToDatabase(context, state)
+                    }
                 },
             contentAlignment = Alignment.Center
         ) {
