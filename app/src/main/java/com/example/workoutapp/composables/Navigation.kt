@@ -31,7 +31,7 @@ fun Navigation(state : WorkoutState, viewModel: WorkoutViewModel){
         //Create route screen composable
         //Takes in state to update the edit text and view model to get the function from workoutViewModel
         composable(route = Screen.CreateRouteScreen.route){
-            CreateRouteScaffold(navController, state, viewModel)
+            CreateRouteScaffold(navController, state, viewModel, context)
         }
         //Statistics page screen composable
         composable(route = Screen.StatsScreen.route){

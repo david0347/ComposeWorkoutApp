@@ -13,4 +13,13 @@ class WorkoutViewModel: ViewModel() {
     fun updateRoutineNameField(str: String) {
         state = state.copy(routineNameTextField = str)
     }
+
+    fun updateDayOfWeekField(str : String){
+        state = state.copy(dayOfWeekTextField = str)
+    }
+
+    fun updateWorkoutNamesField(str : String){
+        state = state.copy(workoutNamesTextField = str)
+    }
+
 }
