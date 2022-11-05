@@ -28,3 +28,14 @@ fun getWeekDay() : String{
     val calendar = Calendar.getInstance()
     return calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault())
 }
+
+//Function to get the string of workouts from the routine table based on the day of the week
+suspend fun getRoutineFromDayOfWeek(context: Context){
+    val dao = RoutineDatabase.getInstance(context).routineDao
+
+    var routine : Routine = dao.getWorkoutFromDate(getWeekDay())
+
+    Log.d("workout routine: ", routine.workout)
+}
+
+//Add a function to parse the string into a string array

@@ -21,12 +21,19 @@ interface RoutineDao {
     @Query("SELECT * FROM routine WHERE routineName = :routineName")
     suspend fun getRoutineWithWorkouts(routineName : String) : List<RoutineWithWorkout>
 
+    //Delete routine table
     @Query("DELETE FROM Routine")
     suspend fun deleteRoutine()
 
+    //Delete workout table
     @Query("DELETE FROM Workout")
     suspend fun deleteWorkout()
 
+    //Count items in routine table
     @Query("SELECT COUNT(routineName) FROM Routine")
     suspend fun countRoutine(): Int
+
+    //Query to get a routine from the day of the week
+    @Query("SELECT * FROM Routine WHERE dayAssigned = :dayOfWeek")
+    suspend fun getWorkoutFromDate(dayOfWeek : String) : Routine
 }
