@@ -23,6 +23,7 @@ import androidx.navigation.NavController
 import com.example.workoutapp.RoutineDatabase
 import com.example.workoutapp.ui.theme.darkBlue
 import com.example.workoutapp.ui.theme.lightBlue
+import com.example.workoutapp.viewModel.getWeekDay
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -62,7 +63,7 @@ fun deleteTable(context: Context){
             //GlobalScope is a coroutine, Dispatchers.IO is a thread used for DB
             .clickable {
                 GlobalScope.launch(Dispatchers.IO) { var count = dao.countRoutine()
-                    Log.d("Database Size: ", count.toString())}
+                    Log.d("Database Size: ", count.toString()) }
 
             },
         contentAlignment = Alignment.Center

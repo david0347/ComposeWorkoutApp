@@ -1,20 +1,20 @@
 package com.example.workoutapp.composables
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.Lifecycle.State
 import androidx.navigation.NavController
+import com.example.workoutapp.viewModel.WorkoutState
 
 @Composable
-fun StartWorkoutPageScaffold(navController: NavController){
+fun StartWorkoutPageScaffold(navController: NavController, state: WorkoutState){
     Scaffold(
         bottomBar = { BottomNavBar(navController)},
-        content = { startWorkoutPage() }
+        content = { startWorkoutPage(state) }
     )
 }
 
 @Composable
-fun startWorkoutPage(){
-    Header(text = "Start Workout")
+fun startWorkoutPage(state : WorkoutState){
+    Header(text = state.weekday)
 }

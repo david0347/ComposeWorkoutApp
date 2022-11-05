@@ -8,30 +8,21 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.unit.toSize
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.workoutapp.ui.theme.darkBlue
 import com.example.workoutapp.ui.theme.lightBlue
 import com.example.workoutapp.viewModel.WorkoutState
 import com.example.workoutapp.viewModel.WorkoutViewModel
 import com.example.workoutapp.viewModel.addToDatabase
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -39,6 +30,7 @@ import kotlinx.coroutines.launch
 //Takes in a navcontroller for navigation
 //Takes in a state to update the edit texts
 //Takes in a viewModel to call functions inside of WorkoutViewModel
+//Takes in a context to send to the function to insert a Routine into the database
 //This is the main composable to hold the scaffolding
 @Composable
 fun CreateRouteScaffold(navController: NavController,
@@ -63,7 +55,7 @@ fun CreateRoutine(state : WorkoutState, viewModel: WorkoutViewModel, context : C
     }
 }
 
-//Passes state and viewModel down again
+//Passes state, context and viewModel down again
 //Creates a column to hold the information within the "Create Routine" section
 @Composable
 fun InfoColumn(state: WorkoutState, viewModel: WorkoutViewModel, context : Context){
@@ -84,6 +76,7 @@ fun InfoColumn(state: WorkoutState, viewModel: WorkoutViewModel, context : Conte
 }
 
 //Edit Text for Routine
+//Has a Lambda function to update state as a parameter
 @Composable
 fun routineName(
     state : WorkoutState,
@@ -109,6 +102,8 @@ fun routineName(
     }
 }
 
+//Currently an Edit Text for choosing a day of the week.
+//In the future I want to make this a drop down, but too complicated for now
 @Composable
 fun dayOfWeekDropDown(
     state: WorkoutState,
@@ -138,6 +133,8 @@ fun dayOfWeekDropDown(
     }
 }
 
+//Edit Text for workoutnames, again just temporary. I will either make it look better
+//Or revamp the whole thing
 @Composable
 fun WorkoutNames(
     state: WorkoutState,
@@ -170,6 +167,7 @@ fun WorkoutNames(
     }
 }
 
+//Button to add the information to the database
 @Composable
 fun CreateRoutineButton(context : Context, state : WorkoutState){
     Box(
@@ -184,6 +182,8 @@ fun CreateRoutineButton(context : Context, state : WorkoutState){
                 .background(lightBlue)
                 .border(width = 2.dp, color = darkBlue, shape = RoundedCornerShape(15.dp))
                 .clickable {
+                    //Start a coroutine to run a suspend function which adds Routine to
+                    //Routine entity table
                     GlobalScope.launch() {
                         addToDatabase(context, state)
                     }
@@ -195,6 +195,7 @@ fun CreateRoutineButton(context : Context, state : WorkoutState){
     }
 }
 
+//Reusable text composable to name the edit texts
 @Composable
 fun textForDesc(string : String){
     Text(modifier = Modifier
