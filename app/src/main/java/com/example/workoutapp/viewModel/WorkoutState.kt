@@ -6,5 +6,6 @@ data class WorkoutState(
     var weekday : String = getWeekDay(),
     var routineNameTextField : String =  "",
     var dayOfWeekTextField : String = "",
-    var workoutNamesTextField : String = ""
+    var workoutNamesTextField : String = "",
+    var workouts : List<String> = listOf("EMPTY")
 )

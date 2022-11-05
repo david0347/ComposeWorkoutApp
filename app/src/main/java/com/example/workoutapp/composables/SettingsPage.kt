@@ -23,6 +23,7 @@ import androidx.navigation.NavController
 import com.example.workoutapp.RoutineDatabase
 import com.example.workoutapp.ui.theme.darkBlue
 import com.example.workoutapp.ui.theme.lightBlue
+import com.example.workoutapp.viewModel.getParsedWorkout
 import com.example.workoutapp.viewModel.getRoutineFromDayOfWeek
 import com.example.workoutapp.viewModel.getWeekDay
 import kotlinx.coroutines.Dispatchers
@@ -67,6 +68,7 @@ fun deleteTable(context: Context){
                     Log.d("Database Size: ", count.toString())
                     //Test function to see if this works(It does!)
                     //getRoutineFromDayOfWeek(context)
+                    //getParsedWorkout(context)
                 }
 
             },

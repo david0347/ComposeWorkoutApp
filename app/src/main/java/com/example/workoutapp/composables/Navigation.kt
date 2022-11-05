@@ -43,7 +43,7 @@ fun Navigation(state : WorkoutState, viewModel: WorkoutViewModel){
         }
         //Start workout screen composable
         composable(route = Screen.StartWorkoutScreen.route){
-            StartWorkoutPageScaffold(navController, state)
+            StartWorkoutPageScaffold(navController, state, context)
         }
         //Set day screen composable
         composable(route = Screen.SetDaysScreen.route){

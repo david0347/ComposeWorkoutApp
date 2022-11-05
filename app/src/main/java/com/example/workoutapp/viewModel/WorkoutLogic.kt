@@ -1,9 +1,12 @@
 package com.example.workoutapp.viewModel
 
 import android.content.Context
+import android.provider.Settings.Global
 import android.util.Log
 import com.example.workoutapp.RoutineDatabase
 import com.example.workoutapp.entities.Routine
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.util.*
 
 //This function will add a Routine to the database if the information on
@@ -30,12 +33,26 @@ fun getWeekDay() : String{
 }
 
 //Function to get the string of workouts from the routine table based on the day of the week
-suspend fun getRoutineFromDayOfWeek(context: Context){
+//Returns a routine for the day of week
+suspend fun getRoutineFromDayOfWeek(context: Context) : Routine{
     val dao = RoutineDatabase.getInstance(context).routineDao
 
-    var routine : Routine = dao.getWorkoutFromDate(getWeekDay())
-
-    Log.d("workout routine: ", routine.workout)
+    return dao.getWorkoutFromDate(getWeekDay())
 }
 
-//Add a function to parse the string into a string array
+//Function to parse the string from getRoutineFromDayOfWeek function
+// into a string array
+//Returns a string array
+fun getParsedWorkout(context : Context, state : WorkoutState): List<String>{
+
+    var parsedWorkout = listOf<String>()
+    GlobalScope.launch {
+        var routine = getRoutineFromDayOfWeek(context)
+
+        parsedWorkout = routine.workout.split(",")
+
+        Log.d("Workout for the day", parsedWorkout.toString())
+    }
+    state.workouts = parsedWorkout
+    return parsedWorkout
+}
