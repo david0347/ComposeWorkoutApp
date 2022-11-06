@@ -43,16 +43,17 @@ suspend fun getRoutineFromDayOfWeek(context: Context) : Routine{
 //Function to parse the string from getRoutineFromDayOfWeek function
 // into a string array
 //Returns a string array
-fun getParsedWorkout(context : Context, state : WorkoutState): List<String>{
+fun getParsedWorkout(context : Context, state : WorkoutState){
 
     var parsedWorkout = listOf<String>()
     GlobalScope.launch {
+        //Call Function to get the routine based on the day of the week
         var routine = getRoutineFromDayOfWeek(context)
 
+        //Parse the workout string into an array
         parsedWorkout = routine.workout.split(",")
-
-        Log.d("Workout for the day", parsedWorkout.toString())
+        //Save the array to state
+        state.workouts = parsedWorkout
     }
-    state.workouts = parsedWorkout
-    return parsedWorkout
+
 }

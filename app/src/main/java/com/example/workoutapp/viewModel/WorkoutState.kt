@@ -7,5 +7,5 @@ data class WorkoutState(
     var routineNameTextField : String =  "",
     var dayOfWeekTextField : String = "",
     var workoutNamesTextField : String = "",
-    var workouts : List<String> = listOf("EMPTY")
+    var workouts : List<String> = listOf()
 )
