@@ -21,6 +21,7 @@ interface RoutineDao {
     @Query("SELECT * FROM routine WHERE routineName = :routineName")
     suspend fun getRoutineWithWorkouts(routineName : String) : List<RoutineWithWorkout>
 
+
     //Delete routine table
     @Query("DELETE FROM Routine")
     suspend fun deleteRoutine()

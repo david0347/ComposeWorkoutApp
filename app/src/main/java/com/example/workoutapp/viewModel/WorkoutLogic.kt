@@ -1,22 +1,13 @@
 package com.example.workoutapp.viewModel
 
 import android.content.Context
-import android.provider.Settings.Global
-import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.text.toUpperCase
 import com.example.workoutapp.RoutineDatabase
 import com.example.workoutapp.composables.WorkoutSegment
 import com.example.workoutapp.entities.Routine
 import com.example.workoutapp.entities.Workout
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.lang.Thread.State
 import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.util.*
 
 //This function will add a Routine to the database if the information on

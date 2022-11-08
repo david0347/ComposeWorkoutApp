@@ -29,9 +29,10 @@ class MainActivity : ComponentActivity() {
         )
 
         val workouts = listOf(
-            Workout(0, "01/08/2022", "Chest Day","Bench 3x5x135"),
-            Workout(1, "01/12/2022", "Chest Day","Bench 3x5x145"),
-            Workout(2, "01/13/2022", "Leg Day","Squats 3x10x145")
+            Workout(0, "01/08/2022", "Chest Day","1,2,3|1,2,3|1,2,3|1,2,3|1,2,3|,1,2,3|"),
+            Workout(1, "01/12/2022", "Chest Day","1,2,3|1,2,3|1,2,3|1,2,3|1,2,3|,1,2,3|"),
+            Workout(2, "01/13/2022", "Leg Day","1,2,3|1,2,3|1,2,3|"),
+            Workout(3, "01/13/2022", "Arm Day","1,2,3|1,2,3|1,2,3|")
         )
 
         lifecycleScope.launch{

@@ -12,6 +12,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,28 +32,28 @@ import kotlinx.coroutines.launch
 //Get navController for navigation
 //Get context for database
 @Composable
-fun SettingsPageScaffold(navController: NavController, context: Context){
+fun SettingsPageScaffold(navController: NavController, context: Context, state: WorkoutState){
 
     Scaffold(
         bottomBar = { BottomNavBar(navController = navController)},
-        content = { Settings(context) }
+        content = { Settings(context, state) }
     )
 }
 //Get context to pass to composables
 @Composable
-fun Settings(context: Context){
+fun Settings(context: Context, state: WorkoutState){
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
         Header(text = "Settings")
-        deleteTable(context = context)
+        deleteTable(context = context, state)
     }
 
 }
 
 //Get context for dao
 @Composable
-fun deleteTable(context: Context){
+fun deleteTable(context: Context, state: WorkoutState){
 
     //Get dao functionality
     val dao = RoutineDatabase.getInstance(context).routineDao
@@ -67,6 +68,7 @@ fun deleteTable(context: Context){
                     var countWorkout = dao.countWorkout()
                     //Log.d("Database Size: ", count.toString())
                     Log.d("Workout table: ", countWorkout.toString())
+                    getWorkoutInfo(state, context)
                     //Tests to see if a workout has been done today
                     //Test function to see if this works(It does!)
                     //getRoutineFromDayOfWeek(context)

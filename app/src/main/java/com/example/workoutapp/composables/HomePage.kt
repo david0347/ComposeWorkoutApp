@@ -24,6 +24,7 @@ import com.example.workoutapp.ui.theme.darkBlue
 import com.example.workoutapp.ui.theme.lightBlue
 import com.example.workoutapp.ui.theme.mediumBlue
 import com.example.workoutapp.ui.theme.offWhite
+import com.example.workoutapp.viewModel.WorkoutState
 
 /*
 **** Home Page ****
@@ -35,7 +36,7 @@ val daysOfWeekString = listOf("M", "T", "W", "TH", "F", "SA", "SU")
 
 //Holds all the composables that make up homeScreen without scaffolding
 @Composable
-fun HomePage(navController: NavController){
+fun HomePage(navController: NavController, state : WorkoutState){
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -45,7 +46,7 @@ fun HomePage(navController: NavController){
         Header(text = "Welcome Back!")
         //This message will change based on day of the week
         DayOfWeekMessage(messageOfDay = "Today is rest day")
-        DaysOfWeekRow(navController)
+        DaysOfWeekRow(navController, state)
         Spacer(Modifier.padding(top = 20.dp))
         ButtonBox(navController)
     }
@@ -53,10 +54,10 @@ fun HomePage(navController: NavController){
 
 //Holds homePage and utilizes scaffolding
 @Composable
-fun HomePageScaffold(navController: NavController){
+fun HomePageScaffold(navController: NavController, state : WorkoutState){
     Scaffold(
         bottomBar = {BottomNavBar(navController)},
-        content = {HomePage(navController)}
+        content = {HomePage(navController, state)}
     )
 }
 
@@ -85,7 +86,7 @@ fun Header(
 
 //Composable to create a lazy column to have a button for each day of the week
 @Composable
-fun DaysOfWeekRow(navController: NavController){
+fun DaysOfWeekRow(navController: NavController, state : WorkoutState){
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -100,7 +101,7 @@ fun DaysOfWeekRow(navController: NavController){
         ){
             //How to add a lazy column for items in a list
             items(daysOfWeekString){ day ->
-                DaysOfWeekButton(dayOfWeek = day, navController)
+                DaysOfWeekButton(dayOfWeek = day, navController, state)
                 Spacer(modifier = Modifier.padding(2.dp))
             }
         }
@@ -111,14 +112,17 @@ fun DaysOfWeekRow(navController: NavController){
 @Composable
 fun DaysOfWeekButton(
     dayOfWeek: String,
-    navController: NavController
+    navController: NavController,
+    state : WorkoutState
 ){
     Box (modifier = Modifier
         .size(70.dp)
         .clip(CircleShape)
         .background(lightBlue)
         .border(width = 2.dp, color = darkBlue, shape = CircleShape)
-        .clickable { navController.navigate(Screen.DayOfWeekScreen.route) },
+        .clickable {
+            navController.navigate(Screen.DayOfWeekScreen.route)
+                   state.dayOfWeekSelected = dayOfWeek},
         contentAlignment = Alignment.Center
     ){
         Text(
