@@ -33,6 +33,10 @@ interface RoutineDao {
     @Query("SELECT COUNT(routineName) FROM Routine")
     suspend fun countRoutine(): Int
 
+    //Count items in workout table
+    @Query("SELECT COUNT(workoutID) FROM Workout")
+    suspend fun countWorkout(): Int
+
     //Query to get a routine from the day of the week
     @Query("SELECT * FROM Routine WHERE dayAssigned = :dayOfWeek")
     suspend fun getWorkoutFromDate(dayOfWeek : String) : Routine

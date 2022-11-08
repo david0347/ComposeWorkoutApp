@@ -28,15 +28,13 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle.State
 import androidx.navigation.NavController
 import com.example.workoutapp.ui.theme.darkBlue
-import com.example.workoutapp.viewModel.WorkoutState
-import com.example.workoutapp.viewModel.addWorkoutSegment
-import com.example.workoutapp.viewModel.editWorkoutSegment
-import com.example.workoutapp.viewModel.getParsedWorkout
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.max
+import com.example.workoutapp.routes.Screen
 import com.example.workoutapp.ui.theme.lightBlue
+import com.example.workoutapp.viewModel.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -46,13 +44,13 @@ import kotlinx.coroutines.launch
 fun StartWorkoutPageScaffold(navController: NavController, state: WorkoutState, context : Context){
     Scaffold(
         bottomBar = { BottomNavBar(navController)},
-        content = { startWorkoutPage(state, context) }
+        content = { startWorkoutPage(state, context, navController) }
     )
 }
 
 //Composable to hold all other composables in a column
 @Composable
-fun startWorkoutPage(state : WorkoutState, context: Context){
+fun startWorkoutPage(state : WorkoutState, context: Context, navController: NavController){
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -61,14 +59,15 @@ fun startWorkoutPage(state : WorkoutState, context: Context){
         Header(text = state.weekday)
         WorkoutList(
             state = state,
-            context = context)
+            context = context,
+            navController = navController)
 
     }
 }
 
 //Composable to create a Lazy Column for all the workouts
 @Composable
-fun WorkoutList(state : WorkoutState, context: Context){
+fun WorkoutList(state : WorkoutState, context: Context, navController : NavController){
     //A LaunchedEffect is needed to call the function inside a composable
     //Function gets the parsed workout and sends it to state.workouts
     LaunchedEffect(state.workouts) { getParsedWorkout(context, state) }
@@ -99,7 +98,11 @@ fun WorkoutList(state : WorkoutState, context: Context){
                     .background(lightBlue)
                     .border(width = 2.dp, color = darkBlue, shape = RoundedCornerShape(15.dp))
                     .clickable {
-                        //Todo
+                        GlobalScope.launch(Dispatchers.IO) {
+                            addWorkoutToDatabase(state, context)
+
+                        }
+                        navController.navigate(Screen.HomeScreen.route)
                     },
                 contentAlignment = Alignment.Center
             ) {

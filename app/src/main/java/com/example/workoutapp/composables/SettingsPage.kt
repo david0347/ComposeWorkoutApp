@@ -64,8 +64,11 @@ fun deleteTable(context: Context){
             .fillMaxWidth()
             //GlobalScope is a coroutine, Dispatchers.IO is a thread used for DB
             .clickable {
-                GlobalScope.launch(Dispatchers.IO) { var count = dao.countRoutine()
+                GlobalScope.launch(Dispatchers.IO) {
+                    var count = dao.countRoutine()
+                    var countWorkout = dao.countWorkout()
                     Log.d("Database Size: ", count.toString())
+                    Log.d("Workout table: ", countWorkout.toString())
                     //Test function to see if this works(It does!)
                     //getRoutineFromDayOfWeek(context)
                     //getParsedWorkout(context)

@@ -11,19 +11,23 @@ import androidx.compose.ui.text.toUpperCase
 import com.example.workoutapp.RoutineDatabase
 import com.example.workoutapp.composables.WorkoutSegment
 import com.example.workoutapp.entities.Routine
+import com.example.workoutapp.entities.Workout
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.lang.Thread.State
+import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.util.*
 
 //This function will add a Routine to the database if the information on
 //Create Routine Page is correct
 suspend fun addToDatabase(context : Context, state: WorkoutState){
 
-    //Create
+    //Create routine
+    //currentDate is a function I created to return the date
     val routine : Routine = Routine(
         routineName = state.routineNameTextField,
-        dayOfCreation = "10/26/2022",
+        dayOfCreation = currentDate(),
         dayAssigned = state.dayOfWeekTextField.uppercase(),
         workout = state.workoutNamesTextField)
     //Get dao functionality
@@ -105,4 +109,34 @@ fun editWorkoutSegment(
             }
         }
     }
+}
+
+suspend fun addWorkoutToDatabase(
+    state : WorkoutState,
+    context : Context
+){
+
+    var dao = RoutineDatabase.getInstance(context).routineDao
+    var workoutString : String = ""
+    var workout = Workout(workoutID = 0, dayOfWorkout = "", routineName = "", workoutInfo = "")
+
+    for(workouts in state.workoutSegments){
+        workoutString += workouts.sets + "," + workouts.reps + "," + workouts.weight + "|"
+    }
+
+    workout.workoutID = dao.countWorkout()
+    workout.workoutInfo = workoutString
+    workout.dayOfWorkout = currentDate()
+    workout.routineName = getRoutineFromDayOfWeek(context).routineName
+
+    dao.insertWorkout(workout)
+
+    state.workoutSegments = mutableListOf()
+}
+
+//Function to return the date in a string format
+fun currentDate() : String{
+
+    var dateFormat = SimpleDateFormat("MM/dd/yyyy")
+    return dateFormat.format(Date())
 }
