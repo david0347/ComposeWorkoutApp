@@ -78,15 +78,24 @@ fun addWorkoutSegment(workoutCardOrder : Int, state: WorkoutState){
     state.workoutSegments += workoutSegment
 }
 
-//
+//Edits the workout segment created by addWorkoutSegment whenever the text in any of the
+//text fields are updated
+//Takes in workoutCardNumber to match with index of the state variable,
+//the editedTextBox name such as "sets" or "reps",
+//editedText of the actual changed value,
+//and you can not forget about state
 fun editWorkoutSegment(
     workoutCardNumber : Int,
     editedTextBox : String,
     editedText : String,
     state : WorkoutState
 ){
+    //Loop through the workouts and if the workout matches ID,
+    //then update that ID
     for(workouts in state.workoutSegments){
         if(workouts.order == workoutCardNumber){
+            //If the edit text is for sets edit the sets attribute of the object, and so on
+            //Change to a when statement if I feel comfortable doing so
             if(editedTextBox == "sets"){
                 workouts.sets = editedText
             }else if(editedTextBox == "reps"){
