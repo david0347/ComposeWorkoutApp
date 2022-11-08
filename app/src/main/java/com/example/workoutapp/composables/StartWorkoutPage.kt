@@ -13,10 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -28,8 +25,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle.State
 import androidx.navigation.NavController
 import com.example.workoutapp.ui.theme.darkBlue
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.max
 import com.example.workoutapp.routes.Screen
@@ -57,6 +52,15 @@ fun startWorkoutPage(state : WorkoutState, context: Context, navController: NavC
             .fillMaxHeight(.9f)
     ) {
         Header(text = state.weekday)
+        //New
+        SideEffect {
+            GlobalScope.launch(Dispatchers.IO) {
+                if(hasWorkedOutToday(context)){
+
+                }
+
+            }
+        }
         WorkoutList(
             state = state,
             context = context,

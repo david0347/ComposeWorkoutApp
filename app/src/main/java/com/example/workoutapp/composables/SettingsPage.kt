@@ -23,9 +23,7 @@ import androidx.navigation.NavController
 import com.example.workoutapp.RoutineDatabase
 import com.example.workoutapp.ui.theme.darkBlue
 import com.example.workoutapp.ui.theme.lightBlue
-import com.example.workoutapp.viewModel.getParsedWorkout
-import com.example.workoutapp.viewModel.getRoutineFromDayOfWeek
-import com.example.workoutapp.viewModel.getWeekDay
+import com.example.workoutapp.viewModel.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -67,11 +65,14 @@ fun deleteTable(context: Context){
                 GlobalScope.launch(Dispatchers.IO) {
                     var count = dao.countRoutine()
                     var countWorkout = dao.countWorkout()
-                    Log.d("Database Size: ", count.toString())
+                    //Log.d("Database Size: ", count.toString())
                     Log.d("Workout table: ", countWorkout.toString())
+                    //Tests to see if a workout has been done today
+                    Log.d("Has Worked out: ",hasWorkedOutToday(context).toString())
                     //Test function to see if this works(It does!)
                     //getRoutineFromDayOfWeek(context)
                     //getParsedWorkout(context)
+                    //lastWorkoutDay(context)
                 }
 
             },

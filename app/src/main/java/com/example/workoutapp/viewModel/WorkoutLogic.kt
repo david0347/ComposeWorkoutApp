@@ -131,7 +131,6 @@ suspend fun addWorkoutToDatabase(
 
     dao.insertWorkout(workout)
 
-    state.workoutSegments = mutableListOf()
 }
 
 //Function to return the date in a string format
@@ -140,3 +139,31 @@ fun currentDate() : String{
     var dateFormat = SimpleDateFormat("MM/dd/yyyy")
     return dateFormat.format(Date())
 }
+
+//Function to return the last date in the workout table
+suspend fun lastWorkoutDay(context : Context) : String{
+    var dao = RoutineDatabase.getInstance(context).routineDao
+    var lastDate = ""
+
+    Log.d("last date", dao.returnLastWorkout().dayOfWorkout)
+    try {
+        lastDate = dao.returnLastWorkout().dayOfWorkout
+    }catch (e : Exception ){
+        lastDate = "00/00/0000"
+    }
+    return lastDate
+}
+
+suspend fun hasWorkedOutToday(
+    context : Context
+) : Boolean{
+    var testingDate = lastWorkoutDay(context)
+    if(testingDate == currentDate()){
+        return true
+    }
+    if(testingDate == "00/00/0000"){
+        return true
+    }
+    return false
+}
+
