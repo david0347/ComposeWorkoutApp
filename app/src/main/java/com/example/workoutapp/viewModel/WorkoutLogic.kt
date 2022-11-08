@@ -3,10 +3,17 @@ package com.example.workoutapp.viewModel
 import android.content.Context
 import android.provider.Settings.Global
 import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.text.toUpperCase
 import com.example.workoutapp.RoutineDatabase
+import com.example.workoutapp.composables.WorkoutSegment
 import com.example.workoutapp.entities.Routine
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.lang.Thread.State
 import java.util.*
 
 //This function will add a Routine to the database if the information on
@@ -17,19 +24,24 @@ suspend fun addToDatabase(context : Context, state: WorkoutState){
     val routine : Routine = Routine(
         routineName = state.routineNameTextField,
         dayOfCreation = "10/26/2022",
-        dayAssigned = state.dayOfWeekTextField,
+        dayAssigned = state.dayOfWeekTextField.uppercase(),
         workout = state.workoutNamesTextField)
     //Get dao functionality
     val dao = RoutineDatabase.getInstance(context).routineDao
 
     //Call insertRoutine to the routine object and add to database
     dao.insertRoutine(routine)
+
+    //Reset the text fields
+    state.routineNameTextField = ""
+    state.dayOfWeekTextField = ""
+    state.workoutNamesTextField = ""
 }
 
 //Function to return weekday string, thanks YouTube
 fun getWeekDay() : String{
     val calendar = Calendar.getInstance()
-    return calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault())
+    return calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault()).uppercase()
 }
 
 //Function to get the string of workouts from the routine table based on the day of the week
@@ -45,7 +57,7 @@ suspend fun getRoutineFromDayOfWeek(context: Context) : Routine{
 //Returns a string array
 fun getParsedWorkout(context : Context, state : WorkoutState){
 
-    var parsedWorkout = listOf<String>()
+    var parsedWorkout: List<String>
     GlobalScope.launch {
         //Call Function to get the routine based on the day of the week
         var routine = getRoutineFromDayOfWeek(context)
@@ -56,4 +68,32 @@ fun getParsedWorkout(context : Context, state : WorkoutState){
         state.workouts = parsedWorkout
     }
 
+}
+
+//Function is triggered when the startWorkoutPage is loaded
+//It creates a workoutSegment object to temporarily hold the sets, reps, and weight
+//for each card and then puts it into an array in state.
+fun addWorkoutSegment(workoutCardOrder : Int, state: WorkoutState){
+    var workoutSegment : WorkoutSegment = WorkoutSegment(workoutCardOrder)
+    state.workoutSegments += workoutSegment
+}
+
+//
+fun editWorkoutSegment(
+    workoutCardNumber : Int,
+    editedTextBox : String,
+    editedText : String,
+    state : WorkoutState
+){
+    for(workouts in state.workoutSegments){
+        if(workouts.order == workoutCardNumber){
+            if(editedTextBox == "sets"){
+                workouts.sets = editedText
+            }else if(editedTextBox == "reps"){
+                workouts.reps = editedText
+            }else{
+                workouts.weight = editedText
+            }
+        }
+    }
 }

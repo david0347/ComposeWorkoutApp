@@ -19,13 +19,13 @@ class MainActivity : ComponentActivity() {
         val dao = RoutineDatabase.getInstance(this).routineDao
 
         val routines = listOf(
-            Routine("Chest Day", "1/1/1", "Monday", "bench,Machine fly,dumbbell fly"),
-            Routine("Leg Day", "1/2/1", "Tuesday", "squat,leg press,step ups"),
-            Routine("Arm Day", "1/3/1", "Wednesday", "bench,curl,preacher "),
-            Routine("Back Day", "1/4/1", "Thursday", "deadlift,rows,pull ups"),
-            Routine("Shoulder Day", "1/5/1", "Friday", "military press,land mines,shoulder raise"),
-            Routine("Rest Day 1", "1/5/1", "Saturday", "nothing,sleep in,eat breakfast"),
-            Routine("Rest Day 2", "1/5/1", "Saturday", "video games,sleep in,eat breakfast")
+            Routine("Chest Day", "1/1/1", "MONDAY", "bench,Machine fly,dumbbell fly,push ups, dips, dumbbell bench"),
+            Routine("Leg Day", "1/2/1", "TUESDAY", "squat,leg press,step ups"),
+            Routine("Arm Day", "1/3/1", "WEDNESDAY", "bench,curl,preacher "),
+            Routine("Back Day", "1/4/1", "THURSDAY", "deadlift,rows,pull ups"),
+            Routine("Shoulder Day", "1/5/1", "FRIDAY", "military press,land mines,shoulder raise"),
+            Routine("Rest Day 1", "1/5/1", "SATURDAY", "nothing,sleep in,eat breakfast"),
+            Routine("Rest Day 2", "1/5/1", "SUNDAY", "video games,sleep in,eat breakfast")
         )
 
         val workouts = listOf(
