@@ -9,5 +9,6 @@ data class WorkoutState(
     var dayOfWeekTextField : String = "",
     var workoutNamesTextField : String = "",
     var workouts : List<String> = listOf(),
-    var workoutSegments : List<WorkoutSegment> = mutableListOf()
+    var workoutSegments : List<WorkoutSegment> = mutableListOf(),
+    var hasWorkedOut : Boolean = false
 )

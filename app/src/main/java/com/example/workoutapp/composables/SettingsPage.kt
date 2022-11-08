@@ -68,7 +68,6 @@ fun deleteTable(context: Context){
                     //Log.d("Database Size: ", count.toString())
                     Log.d("Workout table: ", countWorkout.toString())
                     //Tests to see if a workout has been done today
-                    Log.d("Has Worked out: ",hasWorkedOutToday(context).toString())
                     //Test function to see if this works(It does!)
                     //getRoutineFromDayOfWeek(context)
                     //getParsedWorkout(context)

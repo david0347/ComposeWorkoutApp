@@ -1,6 +1,7 @@
 package com.example.workoutapp.composables
 
 import android.content.Context
+import android.provider.Settings.Global
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -44,27 +45,38 @@ fun StartWorkoutPageScaffold(navController: NavController, state: WorkoutState, 
 }
 
 //Composable to hold all other composables in a column
+//If the user has already worked out display text that says that
+//Else display workouts
 @Composable
 fun startWorkoutPage(state : WorkoutState, context: Context, navController: NavController){
+
+    //Side Effect to run a function inside of a composable
+    SideEffect {
+        //Coroutine to run the function to utilize the database
+        GlobalScope.launch(Dispatchers.IO) { hasWorkedOutToday(context, state)
+        }
+    }
+
+    //Column to hold the data
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight(.9f)
     ) {
         Header(text = state.weekday)
-        //New
-        SideEffect {
-            GlobalScope.launch(Dispatchers.IO) {
-                if(hasWorkedOutToday(context)){
 
-                }
-
-            }
+        //If the user has not worked out today, display workout cards
+        if(!state.hasWorkedOut) {
+            WorkoutList(
+                state = state,
+                context = context,
+                navController = navController
+            )
         }
-        WorkoutList(
-            state = state,
-            context = context,
-            navController = navController)
+        //If the user has worked out today, inform them to come back tomorrow
+        if(state.hasWorkedOut){
+            alreadyWorkedOutMessage()
+        }
 
     }
 }
@@ -242,5 +254,30 @@ fun WorkoutCard(
 
             Spacer(modifier = Modifier.padding(top = 15.dp))
         }
+    }
+}
+
+@Composable
+fun alreadyWorkedOutMessage(){
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        Text(modifier = Modifier
+            .fillMaxWidth(),
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.Gray,
+            textAlign = TextAlign.Center,
+            text = "Congratulations, you finished your workout today!"
+        )
+        Text(modifier = Modifier
+            .fillMaxWidth(),
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.Gray,
+            textAlign = TextAlign.Center,
+            text = "Come back tomorrow for your next routine")
     }
 }

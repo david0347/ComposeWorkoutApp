@@ -111,24 +111,36 @@ fun editWorkoutSegment(
     }
 }
 
+//Function to add a workout to the table
+//Takes in the usual parameters to use dao objects and state
 suspend fun addWorkoutToDatabase(
     state : WorkoutState,
     context : Context
 ){
 
+    //create an instance of the database
     var dao = RoutineDatabase.getInstance(context).routineDao
     var workoutString : String = ""
+    //Create instance of a Workout object
     var workout = Workout(workoutID = 0, dayOfWorkout = "", routineName = "", workoutInfo = "")
 
+    //Loop through workout segments to combine them into parsable data
     for(workouts in state.workoutSegments){
+        //Current format is "sets, reps, weight|"
         workoutString += workouts.sets + "," + workouts.reps + "," + workouts.weight + "|"
     }
 
+    //Count workout will get the number in the database(Which is 1 higher than the index
+    //since indexing starts at 0)
     workout.workoutID = dao.countWorkout()
+    //Workout string that was made in the for loop
     workout.workoutInfo = workoutString
+    //Call function to get the current date
     workout.dayOfWorkout = currentDate()
+    //Get the routine name from the day of the week
     workout.routineName = getRoutineFromDayOfWeek(context).routineName
 
+    //Insert Workout into table
     dao.insertWorkout(workout)
 
 }
@@ -145,7 +157,6 @@ suspend fun lastWorkoutDay(context : Context) : String{
     var dao = RoutineDatabase.getInstance(context).routineDao
     var lastDate = ""
 
-    Log.d("last date", dao.returnLastWorkout().dayOfWorkout)
     try {
         lastDate = dao.returnLastWorkout().dayOfWorkout
     }catch (e : Exception ){
@@ -154,16 +165,27 @@ suspend fun lastWorkoutDay(context : Context) : String{
     return lastDate
 }
 
+//Function to set the T/F state of hasWorkedOut depending on the last date in the database
+//and the current date
 suspend fun hasWorkedOutToday(
-    context : Context
-) : Boolean{
+    context : Context,
+    state : WorkoutState
+){
     var testingDate = lastWorkoutDay(context)
-    if(testingDate == currentDate()){
-        return true
+
+    when (testingDate) {
+        //When testingDate == currentDate set state to true
+        currentDate() -> {
+            state.hasWorkedOut = true
+        }
+        //When date = 00/00/0000 from a previous fail safe return true
+        "00/00/0000" -> {
+            state.hasWorkedOut = true
+        }
+        //Else return false
+        else -> {
+            state.hasWorkedOut = false
+        }
     }
-    if(testingDate == "00/00/0000"){
-        return true
-    }
-    return false
 }
 
