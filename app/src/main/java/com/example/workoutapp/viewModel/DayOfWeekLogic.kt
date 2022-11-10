@@ -54,8 +54,8 @@ suspend fun getWorkoutInfo(
         var routine = routineWithWorkout.last().routine
         //Gets the workout out of the object
         var workout = routineWithWorkout.last().workouts.last()
-        parsedWorkoutNames(routine.workout)
-        parsedWorkouts(workout.workoutInfo)
+        parsedWorkoutNames(routine.workout, state)
+        parsedWorkouts(workout.workoutInfo, state)
         state.workoutName = routine.routineName
         state.isDayOfWeekSelected = true
     }catch (e : java.lang.Exception){
@@ -66,18 +66,21 @@ suspend fun getWorkoutInfo(
 }
 
 //returns a list of the workout names
-fun parsedWorkoutNames(workoutNames : String) : List<String>{
+fun parsedWorkoutNames(workoutNames : String, state: WorkoutState) : List<String>{
     var workouts = workoutNames.split(",")
 
+    state.workoutLength = workouts
     Log.d("workouts parsed", workouts.toString())
     return workouts
 }
 
 //Returns a mutable list that looks like "1,2,3","1,2,3"(Sets, reps, and weight)
-fun parsedWorkouts(workoutData : String) : MutableList<String>{
+fun parsedWorkouts(workoutData : String, state: WorkoutState) : MutableList<String>{
     var workouts : MutableList<String> = workoutData.split("|").toMutableList()
     workouts.removeLast()
     Log.d("workout data parsed", workouts.toString())
 
+    state.workoutInfo = workouts
     return workouts
 }
+

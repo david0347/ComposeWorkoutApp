@@ -16,5 +16,8 @@ data class WorkoutState(
     //variables to edit data in DaysOfWeekPage
     var dayOfWeekSelected : String = "",
     var isDayOfWeekSelected : Boolean = false,
-    var workoutName : String = ""
+    var workoutName : String = "",
+    var workoutNames : String = "",
+    var workoutInfo : List<String> = listOf(),
+    var workoutLength : List<String> = listOf()
 )
