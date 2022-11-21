@@ -40,12 +40,9 @@ fun DayOfWeek(
     state : WorkoutState,
     context : Context
 ){
-    //Get the workout info and see if data exists for last workout
-    SideEffect {
-        GlobalScope.launch(Dispatchers.IO) {
-            getWorkoutInfo(state, context )
-        }
-    }
+    //When the page is clicked on from the menu it calls the function to get the data from the database
+    //It fixed the big issue with the data being a one off error
+    //May be able to use this information for the statistics page
     //Main Column of information
     Column(modifier = Modifier
         .fillMaxSize())

@@ -1,5 +1,6 @@
 package com.example.workoutapp.composables
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -11,6 +12,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,6 +27,10 @@ import com.example.workoutapp.ui.theme.lightBlue
 import com.example.workoutapp.ui.theme.mediumBlue
 import com.example.workoutapp.ui.theme.offWhite
 import com.example.workoutapp.viewModel.WorkoutState
+import com.example.workoutapp.viewModel.getWorkoutInfo
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 /*
 **** Home Page ****
@@ -36,7 +42,7 @@ val daysOfWeekString = listOf("M", "T", "W", "TH", "F", "SA", "SU")
 
 //Holds all the composables that make up homeScreen without scaffolding
 @Composable
-fun HomePage(navController: NavController, state : WorkoutState){
+fun HomePage(navController: NavController, state : WorkoutState, context: Context){
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -46,7 +52,7 @@ fun HomePage(navController: NavController, state : WorkoutState){
         Header(text = "Welcome Back!")
         //This message will change based on day of the week
         DayOfWeekMessage(messageOfDay = "Today is rest day")
-        DaysOfWeekRow(navController, state)
+        DaysOfWeekRow(navController, state, context = context)
         Spacer(Modifier.padding(top = 20.dp))
         ButtonBox(navController)
     }
@@ -54,10 +60,10 @@ fun HomePage(navController: NavController, state : WorkoutState){
 
 //Holds homePage and utilizes scaffolding
 @Composable
-fun HomePageScaffold(navController: NavController, state : WorkoutState){
+fun HomePageScaffold(navController: NavController, state : WorkoutState, context : Context){
     Scaffold(
         bottomBar = {BottomNavBar(navController)},
-        content = {HomePage(navController, state)}
+        content = {HomePage(navController, state, context)}
     )
 }
 
@@ -86,7 +92,7 @@ fun Header(
 
 //Composable to create a lazy column to have a button for each day of the week
 @Composable
-fun DaysOfWeekRow(navController: NavController, state : WorkoutState){
+fun DaysOfWeekRow(navController: NavController, state : WorkoutState, context : Context){
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -101,7 +107,7 @@ fun DaysOfWeekRow(navController: NavController, state : WorkoutState){
         ){
             //How to add a lazy column for items in a list
             items(daysOfWeekString){ day ->
-                DaysOfWeekButton(dayOfWeek = day, navController, state)
+                DaysOfWeekButton(dayOfWeek = day, navController, state, context = context)
                 Spacer(modifier = Modifier.padding(2.dp))
             }
         }
@@ -109,11 +115,16 @@ fun DaysOfWeekRow(navController: NavController, state : WorkoutState){
 }
 
 //Composable to create the button called in the lazy column
+//I call the getWorkoutInfo function to successfully get the data from the database
+//It was not working inside the DaysOfWeekPage because the coroutine was running along side
+//Everything else and it was being inconsistent giving me a one off error
+//This fixed the problem and I should use something like this with the statistics page
 @Composable
 fun DaysOfWeekButton(
     dayOfWeek: String,
     navController: NavController,
-    state : WorkoutState
+    state : WorkoutState,
+    context : Context
 ){
     Box (modifier = Modifier
         .size(70.dp)
@@ -122,7 +133,12 @@ fun DaysOfWeekButton(
         .border(width = 2.dp, color = darkBlue, shape = CircleShape)
         .clickable {
             navController.navigate(Screen.DayOfWeekScreen.route)
-                   state.dayOfWeekSelected = dayOfWeek},
+                   state.dayOfWeekSelected = dayOfWeek
+                GlobalScope.launch(Dispatchers.IO) {
+                    getWorkoutInfo(state, context )
+
+            }
+        },
         contentAlignment = Alignment.Center
     ){
         Text(
@@ -196,8 +212,35 @@ fun ButtonBox(navController: NavController){
         ){
             MainButtons("Start Workout", navController, Screen.StartWorkoutScreen.route)
             MainButtons("Create New Routine", navController, Screen.CreateRouteScreen.route)
-            MainButtons("Set Days", navController, Screen.SetDaysScreen.route)
+            MainButtons("Edit Routine", navController, Screen.EditRoutineScreen.route)
             MainButtons("Statistics", navController, Screen.StatsScreen.route)
         }
+    }
+}
+
+//Composable for the main 4 buttons on the screen
+//Takes in a string for button name, navController for navigation, and a pageRoute which is a string
+@Composable
+fun StatisticButton(
+    buttonText: String,
+    navController: NavController,
+    pageRoute: String
+){
+    Box(
+        modifier = Modifier
+            .fillMaxWidth(.7f)
+            .clip(RoundedCornerShape(15.dp))
+            .height(75.dp)
+            .background(lightBlue)
+            .border(width = 2.dp, color = darkBlue, shape = RoundedCornerShape(15.dp))
+            .clickable { navController.navigate(Screen.StatsScreen.route) },
+        contentAlignment = Alignment.Center
+    ){
+        Text(
+            color = offWhite,
+            fontSize = 20.sp,
+            fontWeight = Bold,
+            text = buttonText
+        )
     }
 }

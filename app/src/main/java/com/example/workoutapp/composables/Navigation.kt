@@ -26,7 +26,7 @@ fun Navigation(state : WorkoutState, viewModel: WorkoutViewModel){
     NavHost(navController = navController, startDestination = Screen.HomeScreen.route){
         //Home screen composable
         composable(route = Screen.HomeScreen.route){
-            HomePageScaffold(navController, state)
+            HomePageScaffold(navController, state, context)
         }
         //Create route screen composable
         //Takes in state to update the edit text and view model to get the function from workoutViewModel
@@ -46,8 +46,8 @@ fun Navigation(state : WorkoutState, viewModel: WorkoutViewModel){
             StartWorkoutPageScaffold(navController, state, context)
         }
         //Set day screen composable
-        composable(route = Screen.SetDaysScreen.route){
-            SetDaysScaffold(navController)
+        composable(route = Screen.EditRoutineScreen.route){
+            EditRoutineScaffold(navController)
         }
         //Set days of week screen composable
         composable(route = Screen.DayOfWeekScreen.route){
