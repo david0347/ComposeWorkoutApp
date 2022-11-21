@@ -18,7 +18,7 @@ fun dayOfWeekText(state : WorkoutState) : String{
     }
 }
 
-//Supposed to capitalize the first letter, instead just lowercasing everything
+//Supposed to capitalize the first letter, instead just lower casing everything
 //Will get back to later
 fun capitalizeFirstLetter(day: String): String {
     var lowercase = day.lowercase()
@@ -59,7 +59,6 @@ suspend fun getWorkoutInfo(
         state.workoutName = routine.routineName
         state.isDayOfWeekSelected = true
     }catch (e : java.lang.Exception){
-
 
         state.isDayOfWeekSelected = false
     }

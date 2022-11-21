@@ -1,9 +1,10 @@
 package com.example.workoutapp.composables
 
 import android.content.Context
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import android.util.Log
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Scaffold
@@ -12,7 +13,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.workoutapp.ui.theme.offWhite
 import com.example.workoutapp.viewModel.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -26,6 +32,7 @@ fun DayOfWeekScaffold(navController: NavController, state: WorkoutState, context
     )
 }
 
+//I get an error when trying to go to a smaller day of week list
 //Composable holding most of the information
 //This composable gets the info parsed and displays it
 @Composable
@@ -35,7 +42,7 @@ fun DayOfWeek(
 ){
     //Get the workout info and see if data exists for last workout
     SideEffect {
-        GlobalScope.launch(Dispatchers.IO) { 
+        GlobalScope.launch(Dispatchers.IO) {
             getWorkoutInfo(state, context )
         }
     }
@@ -57,15 +64,137 @@ fun DayOfWeek(
                 horizontalAlignment = Alignment.CenterHorizontally
             ){
                 //index the items and display
+                item { labels() }
                 itemsIndexed(state.workoutLength){ index, workouts ->
-                    var parsedWorkoutInfo = state.workoutInfo[index].split(",")
-                    Text(workouts + "sets: " + parsedWorkoutInfo[0]
-                            + "reps: " + parsedWorkoutInfo[1]
-                            + "weight: " + parsedWorkoutInfo[2])
+                    val parsedWorkoutInfo = state.workoutInfo[index].split(",")
+                    Log.d("index", index.toString())
+                    Log.d("state", state.workoutInfo.toString())
+                    WorkoutInfo(workoutName = workouts,
+                        sets = parsedWorkoutInfo[0],
+                        reps = parsedWorkoutInfo[1],
+                        weight = parsedWorkoutInfo[2],
+                        index = index)
                 }
             }
         }else{
             Text(text = "Issues with day of week")
         }
+    }
+}
+
+@Composable
+fun WorkoutInfo(workoutName : String, sets : String, reps : String, weight : String, index : Int){
+
+    if(index % 2 == 0){
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(offWhite)
+        ){
+            Text(
+                modifier = Modifier
+                    .fillMaxSize(.4f),
+                textAlign = TextAlign.Center,
+                fontSize = 20.sp,
+                text = workoutName
+            )
+            Text(
+                modifier = Modifier
+                    .width(60.dp),
+                textAlign = TextAlign.Center,
+                fontSize = 20.sp,
+                text = sets
+            )
+            Text(
+                modifier = Modifier
+                    .width(60.dp),
+                textAlign = TextAlign.Center,
+                fontSize = 20.sp,
+                text = reps
+            )
+            Text(
+                modifier = Modifier
+                    .width(60.dp),
+                textAlign = TextAlign.Center,
+                fontSize = 20.sp,
+                text = weight
+            )
+        }
+    }else{
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.LightGray)
+        ){
+            Text(
+                modifier = Modifier
+                    .fillMaxSize(.4f),
+                textAlign = TextAlign.Center,
+                fontSize = 20.sp,
+
+                text = workoutName
+            )
+            Text(
+                modifier = Modifier
+                    .width(60.dp),
+                textAlign = TextAlign.Center,
+                fontSize = 20.sp,
+
+                text = sets
+            )
+            Text(
+                modifier = Modifier
+                    .width(60.dp),
+                textAlign = TextAlign.Center,
+                fontSize = 20.sp,
+                text = reps
+            )
+            Text(
+                modifier = Modifier
+                    .width(60.dp),
+                textAlign = TextAlign.Center,
+                fontSize = 20.sp,
+                text = weight
+            )
+        }
+    }
+}
+
+@Composable
+fun labels(){
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.Gray)
+            .border(width = 1.dp, color = Color.Black)
+    ){
+        Text(
+            modifier = Modifier
+                .fillMaxSize(.4f),
+            textAlign = TextAlign.Center,
+            fontSize = 16.sp,
+            text = "Workout"
+        )
+        Text(
+            modifier = Modifier
+                .width(60.dp),
+            textAlign = TextAlign.Center,
+            fontSize = 16.sp,
+            text = "Sets"
+        )
+        Text(
+            modifier = Modifier
+                .width(60.dp),
+            textAlign = TextAlign.Center,
+            fontSize = 16.sp,
+            text = "Reps"
+        )
+        Text(
+            modifier = Modifier
+                .width(60.dp),
+            textAlign = TextAlign.Center,
+            fontSize = 16.sp,
+            text = "Weight"
+        )
     }
 }
