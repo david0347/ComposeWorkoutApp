@@ -18,6 +18,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.workoutapp.routes.Screen
 import com.example.workoutapp.ui.theme.darkBlue
 import com.example.workoutapp.ui.theme.lightBlue
 import com.example.workoutapp.viewModel.WorkoutState
@@ -36,29 +37,38 @@ import kotlinx.coroutines.launch
 fun CreateRouteScaffold(navController: NavController,
                         state : WorkoutState,
                         viewModel: WorkoutViewModel,
-                        context : Context){
+                        context : Context,
+){
     Scaffold(
         bottomBar = { BottomNavBar(navController)},
-        content = { CreateRoutine(state = state, viewModel = viewModel,context = context) }
+        content = { CreateRoutine(state = state, viewModel = viewModel,context = context, navController = navController) }
     )
 }
 
 //Passes state and viewModel down so that other composables can use them
 //Holds a column to actually hold the composables
 @Composable
-fun CreateRoutine(state : WorkoutState, viewModel: WorkoutViewModel, context : Context){
+fun CreateRoutine(state : WorkoutState,
+                  viewModel: WorkoutViewModel,
+                  context : Context,
+                  navController: NavController
+){
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
         Header(text = "Create Routine")
-        InfoColumn(state = state, viewModel, context)
+        InfoColumn(state = state, viewModel, context, navController)
     }
 }
 
 //Passes state, context and viewModel down again
 //Creates a column to hold the information within the "Create Routine" section
 @Composable
-fun InfoColumn(state: WorkoutState, viewModel: WorkoutViewModel, context : Context){
+fun InfoColumn(state: WorkoutState,
+               viewModel: WorkoutViewModel,
+               context : Context,
+               navController: NavController
+){
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -70,7 +80,7 @@ fun InfoColumn(state: WorkoutState, viewModel: WorkoutViewModel, context : Conte
         Spacer(Modifier.padding(top = 20.dp))
         WorkoutNames(state = state, onTextChange = viewModel::updateWorkoutNamesField)
         Spacer(Modifier.padding(top = 20.dp))
-        CreateRoutineButton(context, state)
+        CreateRoutineButton(context, state, navController)
 
     }
 }
@@ -169,7 +179,10 @@ fun WorkoutNames(
 
 //Button to add the information to the database
 @Composable
-fun CreateRoutineButton(context : Context, state : WorkoutState){
+fun CreateRoutineButton(context : Context,
+                        state : WorkoutState,
+                        navController: NavController
+){
     Box(
         modifier = Modifier.fillMaxWidth(),
         contentAlignment = Alignment.Center
@@ -187,6 +200,8 @@ fun CreateRoutineButton(context : Context, state : WorkoutState){
                     GlobalScope.launch() {
                         addToDatabase(context, state)
                     }
+                    //Go back to home page when done
+                    navController.navigate(Screen.HomeScreen.route)
                 },
             contentAlignment = Alignment.Center
         ) {

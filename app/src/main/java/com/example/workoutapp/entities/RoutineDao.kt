@@ -52,4 +52,11 @@ interface RoutineDao {
     //Query to get a routine from the day of the week
     @Query("SELECT * FROM Routine WHERE dayAssigned = :dayOfWeek")
     suspend fun getWorkoutFromDate(dayOfWeek : String) : Routine
+
+    //Query to delete a routine based on routine name
+    @Query("DELETE FROM Routine WHERE routineName = :routine")
+    suspend fun deleteRoutineFromRoutineTable(routine : String)
+
+    @Query("DELETE FROM Workout WHERE routineName = :routine")
+    suspend fun deleteRoutineFromWorkoutTable(routine : String)
 }

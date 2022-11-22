@@ -22,6 +22,10 @@ import com.example.workoutapp.routes.Screen
 import com.example.workoutapp.ui.theme.darkBlue
 import com.example.workoutapp.ui.theme.lightBlue
 import com.example.workoutapp.viewModel.WorkoutState
+import com.example.workoutapp.viewModel.deleteRoutine
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 @Composable
 fun DeleteConfirmScaffolding(
@@ -41,6 +45,7 @@ fun DeleteConfirmScaffolding(
             contentAlignment = Alignment.BottomCenter
         ){
             Text(
+                modifier = Modifier.padding(start = 20.dp, end = 20.dp),
                 fontSize = 32.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White,
@@ -60,7 +65,10 @@ fun DeleteConfirmScaffolding(
                     .clip(RoundedCornerShape(5.dp))
                     .background(color = darkBlue)
                     .clickable {
-                               navController.navigate(Screen.HomeScreen.route)
+                        navController.navigate(Screen.HomeScreen.route)
+                        GlobalScope.launch(Dispatchers.IO) {
+                            deleteRoutine(state, context)
+                        }
                     },
                 contentAlignment = Alignment.Center
             ){
