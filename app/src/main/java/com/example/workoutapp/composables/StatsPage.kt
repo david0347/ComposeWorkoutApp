@@ -149,6 +149,8 @@ fun RoutineInformation(routine : Routine){
 //Half successful, the one off error has to do with the coroutines and I semi fixed it by
 //changing the Dispatcher to unconfined for the second coroutine then delaying the threads
 //Works maybe 70% of the time, still have to find a solid fix for it, but it will work for now
+//I think to fix it, I need to abstract the logic to the onClick function to get to this page
+//This will give enough time for the coroutine to finish processing
 @Composable
 fun testColumn(context: Context, state : WorkoutState){
     LazyColumn(

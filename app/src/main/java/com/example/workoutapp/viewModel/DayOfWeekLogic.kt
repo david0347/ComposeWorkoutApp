@@ -26,12 +26,6 @@ fun capitalizeFirstLetter(day: String): String {
     return lowercase
 }
 
-suspend fun printRoutineWithWorkout(context: Context){
-    var dao = RoutineDatabase.getInstance(context).routineDao
-
-    Log.d("routine with workout", dao.getRoutineWithWorkouts("Chest Day").toString())
-}
-
 //Works to an extent
 //So far it gets the routine and workout needed for the day and if it can not be retrieved
 //It changes state.isDayOfWeekSelected to false, else true

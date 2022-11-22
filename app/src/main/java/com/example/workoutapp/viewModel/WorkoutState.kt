@@ -26,5 +26,7 @@ data class WorkoutState(
     var routinesList : MutableList<Routine> = mutableListOf(),
     var workoutsList : MutableList<Workout> = mutableListOf(),
     var isRoutineRetrieved : Boolean = false,
-    var isWorkoutRetrieved : Boolean = false
+    var isWorkoutRetrieved : Boolean = false,
+    //variables for EditRoutinePage
+    var routineName : String = ""
 )

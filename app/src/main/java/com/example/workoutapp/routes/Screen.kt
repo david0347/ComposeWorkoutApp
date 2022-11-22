@@ -8,6 +8,7 @@ sealed class Screen(val route: String){
     object StatsScreen : Screen("stats_screen")
     object DayOfWeekScreen : Screen("day_of_week_screen")
     object SettingsScreen : Screen("settings_screen")
+    object DeleteConfirmScreen : Screen("delete_confirm_screen")
 
 
 }

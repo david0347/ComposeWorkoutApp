@@ -47,11 +47,14 @@ fun Navigation(state : WorkoutState, viewModel: WorkoutViewModel){
         }
         //Set day screen composable
         composable(route = Screen.EditRoutineScreen.route){
-            EditRoutineScaffold(navController)
+            EditRoutineScaffold(navController, state, context)
         }
         //Set days of week screen composable
         composable(route = Screen.DayOfWeekScreen.route){
             DayOfWeekScaffold(navController, state, context)
+        }
+        composable(route = Screen.DeleteConfirmScreen.route){
+            DeleteConfirmScaffolding(navController, state, context)
         }
     }
 }

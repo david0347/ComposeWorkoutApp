@@ -27,9 +27,12 @@ import com.example.workoutapp.ui.theme.lightBlue
 import com.example.workoutapp.ui.theme.mediumBlue
 import com.example.workoutapp.ui.theme.offWhite
 import com.example.workoutapp.viewModel.WorkoutState
+import com.example.workoutapp.viewModel.getAllWorkouts
+import com.example.workoutapp.viewModel.getRoutines
 import com.example.workoutapp.viewModel.getWorkoutInfo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 /*
@@ -54,7 +57,7 @@ fun HomePage(navController: NavController, state : WorkoutState, context: Contex
         DayOfWeekMessage(messageOfDay = "Today is rest day")
         DaysOfWeekRow(navController, state, context = context)
         Spacer(Modifier.padding(top = 20.dp))
-        ButtonBox(navController)
+        ButtonBox(navController, context, state)
     }
 }
 
@@ -133,9 +136,9 @@ fun DaysOfWeekButton(
         .border(width = 2.dp, color = darkBlue, shape = CircleShape)
         .clickable {
             navController.navigate(Screen.DayOfWeekScreen.route)
-                   state.dayOfWeekSelected = dayOfWeek
-                GlobalScope.launch(Dispatchers.IO) {
-                    getWorkoutInfo(state, context )
+            state.dayOfWeekSelected = dayOfWeek
+            GlobalScope.launch(Dispatchers.IO) {
+                getWorkoutInfo(state, context)
 
             }
         },
@@ -199,7 +202,11 @@ fun MainButtons(
 
 //Composable to hold and call all the buttons
 @Composable
-fun ButtonBox(navController: NavController){
+fun ButtonBox(
+    navController: NavController,
+    context : Context,
+    state : WorkoutState
+){
     Box(
         contentAlignment = Alignment.Center
     ){
@@ -212,19 +219,23 @@ fun ButtonBox(navController: NavController){
         ){
             MainButtons("Start Workout", navController, Screen.StartWorkoutScreen.route)
             MainButtons("Create New Routine", navController, Screen.CreateRouteScreen.route)
-            MainButtons("Edit Routine", navController, Screen.EditRoutineScreen.route)
+            //MainButtons("Edit Routine", navController, Screen.EditRoutineScreen.route)
+            EditRoutineButton(buttonText = "Edit Routine", navController = navController, context = context, state = state)
             MainButtons("Statistics", navController, Screen.StatsScreen.route)
+            //StatisticButton(buttonText = "Statistics", navController = navController, context = context, state = state)
         }
     }
 }
 
 //Composable for the main 4 buttons on the screen
 //Takes in a string for button name, navController for navigation, and a pageRoute which is a string
+//Did not totally fix problem, but I think this is the right idea
 @Composable
 fun StatisticButton(
     buttonText: String,
     navController: NavController,
-    pageRoute: String
+    context : Context,
+    state : WorkoutState
 ){
     Box(
         modifier = Modifier
@@ -233,7 +244,47 @@ fun StatisticButton(
             .height(75.dp)
             .background(lightBlue)
             .border(width = 2.dp, color = darkBlue, shape = RoundedCornerShape(15.dp))
-            .clickable { navController.navigate(Screen.StatsScreen.route) },
+            .clickable {
+                navController.navigate(Screen.StatsScreen.route)
+                GlobalScope.launch(Dispatchers.IO) {
+                    getRoutines(context, state)
+                    //getAllWorkouts(context, state, state.routinesList[0].routineName)
+                    //The delay changes the results! I have to mess around more with this
+                    //to understand how to fix it
+                    //delay(10000L)
+                }
+            },
+        contentAlignment = Alignment.Center
+    ){
+        Text(
+            color = offWhite,
+            fontSize = 20.sp,
+            fontWeight = Bold,
+            text = buttonText
+        )
+    }
+}
+
+@Composable
+fun EditRoutineButton(
+    buttonText: String,
+    navController: NavController,
+    context : Context,
+    state : WorkoutState
+){
+    Box(
+        modifier = Modifier
+            .fillMaxWidth(.7f)
+            .clip(RoundedCornerShape(15.dp))
+            .height(75.dp)
+            .background(lightBlue)
+            .border(width = 2.dp, color = darkBlue, shape = RoundedCornerShape(15.dp))
+            .clickable {
+                navController.navigate(Screen.EditRoutineScreen.route)
+                GlobalScope.launch(Dispatchers.IO) {
+                    getRoutines(context, state)
+                }
+            },
         contentAlignment = Alignment.Center
     ){
         Text(
