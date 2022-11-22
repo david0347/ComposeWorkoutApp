@@ -1,13 +1,11 @@
 package com.example.workoutapp.composables
 
-import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -26,14 +24,19 @@ import com.example.workoutapp.ui.theme.darkBlue
 import com.example.workoutapp.ui.theme.lightBlue
 import com.example.workoutapp.viewModel.WorkoutState
 
+//Edit routine scaffold to hold everything
 @Composable
-fun EditRoutineScaffold(navController: NavController, state : WorkoutState, context : Context){
+fun EditRoutineScaffold(
+    navController: NavController,
+    state : WorkoutState
+){
     Scaffold(
         bottomBar = { BottomNavBar(navController)},
         content = { EditRoutine(state = state, navController = navController) }
     )
 }
 
+//A column to hold all the information
 @Composable
 fun EditRoutine(navController : NavController, state : WorkoutState){
     Column(
@@ -46,16 +49,20 @@ fun EditRoutine(navController : NavController, state : WorkoutState){
     }
 }
 
+//A routine card that displays the workout name and a delete button
+//which brings you to the DeleteConfirmScreen
 @Composable
 fun Routines(
     navController: NavController,
     state : WorkoutState
 ){
+    //Lazy column to hold all the info
     LazyColumn(
         modifier = Modifier
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ){
+        //Loop through the routines
         items(state.routinesList){routine ->
             Box(
                 modifier = Modifier
@@ -64,6 +71,7 @@ fun Routines(
                     .border(color = darkBlue, shape = RoundedCornerShape(5.dp), width = 3.dp)
                     .shadow(shape = RoundedCornerShape(5.dp), elevation = 100.dp)
             ){
+                //Row to have the name of the workout and the button in the card
                 Row (
                     modifier = Modifier
                         .fillMaxWidth(),
@@ -71,6 +79,7 @@ fun Routines(
                     verticalAlignment = Alignment.CenterVertically
                         ){
                     Text("   " + routine.routineName)
+                    //Box for the delete button
                     Box(
                         modifier = Modifier
                             .width(100.dp)

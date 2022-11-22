@@ -5,13 +5,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -27,17 +25,23 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
+//Almost everything is inside this decent sized composable
+//This is a column with two buttons to choose from
+//Takes in the usual parameters
+//Note there is no bottom nav bar so it is harder for the user to back out of the screen
 @Composable
 fun DeleteConfirmScaffolding(
     navController : NavController,
     state : WorkoutState,
     context : Context
 ){
+    //Column to hold everything
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(color = lightBlue)
     ) {
+        //Box to hold the text
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -53,12 +57,16 @@ fun DeleteConfirmScaffolding(
                 text = "Are you sure you want to delete " + state.routineName + "?"
             )
         }
+
         Spacer(modifier = Modifier.padding(bottom = 50.dp))
+
+        //Row to fit the buttons in them
         Row(
             modifier = Modifier
                 .fillMaxWidth(.95f),
             horizontalArrangement = Arrangement.SpaceAround
         ){
+            //Box for the user to choose yes
             Box(
                 modifier = Modifier
                     .width(100.dp)
@@ -74,6 +82,7 @@ fun DeleteConfirmScaffolding(
             ){
                 TextConfirm("Yes")
             }
+            //Box for the user to choose no
             Box(
                 modifier = Modifier
                     .width(100.dp)
@@ -90,6 +99,7 @@ fun DeleteConfirmScaffolding(
     }
 }
 
+//Composable for the text boxes, just so I didn't have to do the same modifiers twice
 @Composable
 fun TextConfirm(text : String){
     Text(
