@@ -4,6 +4,7 @@ import androidx.compose.ui.geometry.Size
 import com.example.workoutapp.composables.WorkoutSegment
 import com.example.workoutapp.entities.Routine
 import com.example.workoutapp.entities.Workout
+import com.example.workoutapp.entities.relations.RoutineWithWorkout
 
 data class WorkoutState(
     var weekday : String = getWeekDay(),
@@ -23,6 +24,7 @@ data class WorkoutState(
     var workoutInfo : List<String> = listOf(),
     var workoutLength : List<String> = listOf(),
     //variables for statistics
+    var routineWithWorkout: List<RoutineWithWorkout> = listOf(),
     var routinesList : MutableList<Routine> = mutableListOf(),
     var workoutsList : MutableList<Workout> = mutableListOf(),
     var isRoutineRetrieved : Boolean = false,

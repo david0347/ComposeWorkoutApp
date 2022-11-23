@@ -19,11 +19,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.BiasAbsoluteAlignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.workoutapp.entities.Routine
 import com.example.workoutapp.ui.theme.darkBlue
+import com.example.workoutapp.ui.theme.lightBlue
+import com.example.workoutapp.ui.theme.offWhite
 import com.example.workoutapp.viewModel.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -49,7 +54,8 @@ fun StatsPage(state : WorkoutState, context: Context){
         Header(text = "Statistics")
         Spacer(modifier = Modifier.padding(top = 10.dp))
         //Routines(state, context)
-        testColumn(context = context, state = state)
+        //testColumn(context = context, state = state)
+        testing(state, context)
     }
 }
 
@@ -222,4 +228,85 @@ fun testColumn(context: Context, state : WorkoutState){
         }
         item { Spacer(modifier = Modifier.padding(bottom = 60.dp)) }
     }
+}
+
+@Composable
+fun testing(state: WorkoutState, context: Context){
+
+    //Text(state.routineWithWorkout.toString())
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ){
+        itemsIndexed(state.routineWithWorkout){index, routineWithWorkout ->
+            var parsedWorkouts = parsedWorkoutNames(routineWithWorkout.routine.workout, state)
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(.95f)
+                    .clip(RoundedCornerShape(10.dp))
+                    .border(shape = RoundedCornerShape(10.dp), color = darkBlue, width = 3.dp),
+            ){
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    routineInfoRow(routineWithWorkout.routine)
+                    //Text(routineWithWorkout.routine.routineName)
+                    for(workouts in routineWithWorkout.workouts){
+                        Text(
+                            modifier = Modifier
+                                .background(Color.DarkGray)
+                                .fillMaxWidth(),
+                            fontSize = 15.sp,
+                            textAlign = TextAlign.Center,
+                            color = Color.White,
+                            text = workouts.dayOfWorkout)
+
+                        labels()
+
+                        parsedWorkouts(workouts.workoutInfo, state)
+
+                        state.workoutInfo.forEachIndexed{workoutIndex, workout ->
+                            var parsedWorkoutInfo = parsedWorkoutNames(workout, state)
+
+                            WorkoutInfo(
+                                parsedWorkouts[workoutIndex],
+                                parsedWorkoutInfo[0],
+                                parsedWorkoutInfo[1],
+                                parsedWorkoutInfo[2],
+                                workoutIndex
+                                )
+                        }
+                    }
+                }
+
+            }
+            Spacer(modifier = Modifier.padding(bottom = 10.dp))
+        }
+    }
+}
+
+@Composable
+fun routineInfoRow(routine : Routine){
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(color = lightBlue),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        routineNameTextCustomization("  " + routine.dayAssigned.lowercase())
+        routineNameTextCustomization(routine.routineName)
+        routineNameTextCustomization(routine.dayOfCreation + "  ")
+    }
+}
+@Composable
+fun routineNameTextCustomization(text : String){
+    Text(
+        modifier = Modifier.padding(top = 5.dp, bottom = 5.dp),
+        fontSize = 15.sp,
+        color = Color.White,
+        fontWeight = FontWeight.Bold,
+        text = text
+    )
 }

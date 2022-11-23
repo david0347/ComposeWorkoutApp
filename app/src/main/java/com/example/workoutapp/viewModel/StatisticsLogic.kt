@@ -21,4 +21,13 @@ suspend fun getAllWorkouts(context : Context, state : WorkoutState, routineName 
      state.workoutsList = dao.getAllWorkoutsForRoutine(routineName)
 }
 
+//Sets state.routineWithWorkout to the joined routine and workout table
+suspend fun getRoutinesWithWorkouts(
+    context : Context,
+    state : WorkoutState,
+){
+    var dao = RoutineDatabase.getInstance(context).routineDao
+
+    state.routineWithWorkout = dao.getAllRoutinesAndWorkouts()
+}
 

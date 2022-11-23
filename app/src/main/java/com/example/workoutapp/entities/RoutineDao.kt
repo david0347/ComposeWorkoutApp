@@ -21,6 +21,11 @@ interface RoutineDao {
     @Query("SELECT * FROM routine WHERE routineName = :routineName")
     suspend fun getRoutineWithWorkouts(routineName : String) : List<RoutineWithWorkout>
 
+    //Returns the whole routine and workout table joined
+    @Transaction
+    @Query("SELECT * FROM routine")
+    suspend fun getAllRoutinesAndWorkouts() : List<RoutineWithWorkout>
+
     //Query to get all routines and return a list of them
     @Query("SELECT * FROM routine")
     suspend fun getAllRoutines() : MutableList<Routine>

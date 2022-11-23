@@ -26,10 +26,7 @@ import com.example.workoutapp.ui.theme.darkBlue
 import com.example.workoutapp.ui.theme.lightBlue
 import com.example.workoutapp.ui.theme.mediumBlue
 import com.example.workoutapp.ui.theme.offWhite
-import com.example.workoutapp.viewModel.WorkoutState
-import com.example.workoutapp.viewModel.getAllWorkouts
-import com.example.workoutapp.viewModel.getRoutines
-import com.example.workoutapp.viewModel.getWorkoutInfo
+import com.example.workoutapp.viewModel.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -221,8 +218,8 @@ fun ButtonBox(
             MainButtons("Create New Routine", navController, Screen.CreateRouteScreen.route)
             //MainButtons("Edit Routine", navController, Screen.EditRoutineScreen.route)
             EditRoutineButton(buttonText = "Edit Routine", navController = navController, context = context, state = state)
-            MainButtons("Statistics", navController, Screen.StatsScreen.route)
-            //StatisticButton(buttonText = "Statistics", navController = navController, context = context, state = state)
+            //MainButtons("Statistics", navController, Screen.StatsScreen.route)
+            StatisticButton(buttonText = "Statistics", navController = navController, context = context, state = state)
         }
     }
 }
@@ -247,11 +244,7 @@ fun StatisticButton(
             .clickable {
                 navController.navigate(Screen.StatsScreen.route)
                 GlobalScope.launch(Dispatchers.IO) {
-                    getRoutines(context, state)
-                    //getAllWorkouts(context, state, state.routinesList[0].routineName)
-                    //The delay changes the results! I have to mess around more with this
-                    //to understand how to fix it
-                    //delay(10000L)
+                    getRoutinesWithWorkouts(context, state)
                 }
             },
         contentAlignment = Alignment.Center

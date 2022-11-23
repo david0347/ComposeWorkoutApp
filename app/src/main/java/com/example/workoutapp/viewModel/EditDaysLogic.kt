@@ -3,6 +3,7 @@ package com.example.workoutapp.viewModel
 import android.content.Context
 import com.example.workoutapp.RoutineDatabase
 
+//Deletes the routine selected
 suspend fun deleteRoutine(
     state : WorkoutState,
     context : Context
