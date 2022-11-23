@@ -1,22 +1,15 @@
 package com.example.workoutapp.composables
 
-import android.content.Context
-import android.provider.Settings.Global
-import android.util.Log
-import android.view.WindowInsets.Side
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.BiasAbsoluteAlignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -28,24 +21,21 @@ import androidx.navigation.NavController
 import com.example.workoutapp.entities.Routine
 import com.example.workoutapp.ui.theme.darkBlue
 import com.example.workoutapp.ui.theme.lightBlue
-import com.example.workoutapp.ui.theme.offWhite
 import com.example.workoutapp.viewModel.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import java.util.logging.Handler
 
+
+//StatsPageScaffold that includes the navbar
 @Composable
-fun StatsPageScaffold(navController: NavController, state : WorkoutState, context : Context){
+fun StatsPageScaffold(navController: NavController, state : WorkoutState){
     Scaffold(
         bottomBar = { BottomNavBar(navController)},
-        content = { StatsPage(state, context)}
+        content = { StatsPage(state)}
     )
 }
 
+//Column to hold all the data on the page
 @Composable
-fun StatsPage(state : WorkoutState, context: Context){
+fun StatsPage(state : WorkoutState){
     Column(
         modifier = Modifier
             .fillMaxSize(),
@@ -53,206 +43,42 @@ fun StatsPage(state : WorkoutState, context: Context){
     ) {
         Header(text = "Statistics")
         Spacer(modifier = Modifier.padding(top = 10.dp))
-        //Routines(state, context)
-        //testColumn(context = context, state = state)
-        testing(state, context)
+        StatisticsCards(state)
     }
 }
 
+//Workout cards to hold all the data including routine and workout info
+//Since I moved the coroutine call to the onclick function this page now works properly!
 @Composable
-fun Routines(state : WorkoutState, context : Context){
+fun StatisticsCards(state: WorkoutState){
 
-    //Side effect calls getRoutines which returns all the routines in state
-    SideEffect {
-        GlobalScope.launch(Dispatchers.IO) {
-            getRoutines(context, state)
-            delay(1000L)
-            //getAllWorkouts(context, state, state.routinesList[0].routineName)
-        }
-    }
-
-    LazyColumn(
-
-    ) {
-        //Loops through the routinesList which is created by above side effect
-        itemsIndexed(state.routinesList) { index, routines ->
-            //This side effect calls getAllWorkouts which sets state based on routine name
-            SideEffect {
-                GlobalScope.launch(Dispatchers.Unconfined) {
-                    getAllWorkouts(context, state, routines.routineName)
-                    delay(2000L)
-                    //Log.d("Routine", routines.routineName)
-                    //Log.d("workout day", state.workoutsList.toString())
-                    Log.d("index", index.toString())
-                }
-            }
-
-            Box(
-                modifier = Modifier
-                    .clip(shape = RoundedCornerShape(5.dp))
-                    .border(shape = RoundedCornerShape(5.dp), color = darkBlue, width = 3.dp)
-                    .fillMaxWidth(.95f)
-            ) {
-                Column(
-
-                ) {
-
-                    RoutineInformation(routine = routines)
-                    Text(routines.routineName)
-
-                    //Log.d("Workout List", state.workoutsList.toString())
-
-                    //The issue is that this runs before the call to getAllWorkouts
-                    //above somehow
-                    Log.d("index outside of for", index.toString())
-                    while (state.workoutsList.isNotEmpty()){
-
-                        Log.d("index in for", index.toString())
-                        Text(state.workoutsList[0].dayOfWorkout)
-                        state.workoutsList.removeAt(0)
-                        //Log.d("Workout List While", state.workoutsList.toString())
-
-                    }
-                    //for(workouts in state.workoutsList){
-
-                      //  Log.d("Workout Date",workouts.dayOfWorkout)
-                      //  Text(workouts.dayOfWorkout)
-                    //}
-                    Text(routines.routineName)
-
-                }
-
-
-            }
-            Spacer(modifier = Modifier.padding(top = 10.dp))
-        }
-    }
-}
-
-
-@Composable
-fun RoutineInformation(routine : Routine){
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Text(
-            text = "   " + routine.dayOfCreation,
-            fontSize = 20.sp
-        )
-        Text(
-            text = routine.routineName,
-            fontSize = 20.sp
-        )
-        Text(
-            text = routine.dayAssigned.lowercase() + "   ",
-            fontSize = 20.sp
-        )
-    }
-}
-
-//Test Column to try and get the data to not be one off
-//Half successful, the one off error has to do with the coroutines and I semi fixed it by
-//changing the Dispatcher to unconfined for the second coroutine then delaying the threads
-//Works maybe 70% of the time, still have to find a solid fix for it, but it will work for now
-//I think to fix it, I need to abstract the logic to the onClick function to get to this page
-//This will give enough time for the coroutine to finish processing
-@Composable
-fun testColumn(context: Context, state : WorkoutState){
-    LazyColumn(
-
-    ){
-        item {
-            //Side effect calls getRoutines which returns all the routines in state
-            //I do not need the SideEffect and I can use this line below, not sure how it effects
-            //accuracy
-            //GlobalScope.launch (Dispatchers.IO){ getRoutines(context, state)
-            //delay(10000L)}
-            SideEffect {
-                GlobalScope.launch(Dispatchers.IO) {
-                    getRoutines(context, state)
-                    getAllWorkouts(context, state, state.routinesList[0].routineName)
-                    //The delay changes the results! I have to mess around more with this
-                    //to understand how to fix it
-                    delay(10000L)
-                }
-            }
-
-            //For loop to go through the all the routines
-            for(routines in state.routinesList){
-
-                //Global Scope to get all workouts based on routine name
-                GlobalScope.launch(Dispatchers.Unconfined) { getAllWorkouts(context, state, routines.routineName)
-                    //Delay which improves accuracy, have to test it more
-                delay(10000000L) }
-
-                //Get the workout names affiliated with each routine
-                var routineNames = routines.workout
-                var parsedRoutines = parsedWorkoutNames(routineNames, state)
-
-                //Box to wrap all content in
-                Box (
-                      modifier = Modifier
-                          .fillMaxWidth(.95f)
-                          .clip(RoundedCornerShape(5.dp))
-                          .border(color = darkBlue, shape = RoundedCornerShape(5.dp), width = 3.dp)
-                        ){
-                    //Column to go inside box
-                    Column() {
-                        //Routine name
-                        Text(routines.routineName)
-                        //Log.d("workouts List length", state.workoutsList.size.toString())
-
-                        //For loop to go through each workout based on date
-                        for(workouts in state.workoutsList){
-                            //Print date of workout
-                            Text(workouts.dayOfWorkout)
-
-                            //Parse workout data into "1,2,3" blocks for each workout
-                            var workouts = parsedWorkouts(workouts.workoutInfo, state)
-                            Log.d("parsed workout", parsedRoutines.toString())
-
-                            //For each workout print the workout name and the information
-                            workouts.forEachIndexed{index, workoutInfo ->
-                                //Parse the data into an array
-                                var workoutInformation = parsedWorkoutNames(workoutInfo, state)
-
-                                //Print workout data to screen. Problem with parsedRoutines Index
-                                Text( parsedRoutines[index] + workoutInformation[0] + workoutInformation[1] + workoutInformation[2])
-                            }
-                        }
-                    }
-                }
-                Spacer(modifier = Modifier.padding(top = 10.dp))
-            }
-        }
-        item { Spacer(modifier = Modifier.padding(bottom = 60.dp)) }
-    }
-}
-
-@Composable
-fun testing(state: WorkoutState, context: Context){
-
-    //Text(state.routineWithWorkout.toString())
+    //Lazy Column to create each card
     LazyColumn(
         modifier = Modifier
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ){
-        itemsIndexed(state.routineWithWorkout){index, routineWithWorkout ->
-            var parsedWorkouts = parsedWorkoutNames(routineWithWorkout.routine.workout, state)
+        //Loop through all the routineWithWorkout arrays
+        items(state.routineWithWorkout){routineWithWorkout ->
+            //Return parsed workout names such as "squats" "leg Press" ...
+            val parsedWorkouts = parsedWorkoutNames(routineWithWorkout.routine.workout, state)
+
+            //Box to add border and hold the columns of data
             Box(
                 modifier = Modifier
                     .fillMaxWidth(.95f)
                     .clip(RoundedCornerShape(10.dp))
                     .border(shape = RoundedCornerShape(10.dp), color = darkBlue, width = 3.dp),
             ){
+                //Column to hold all the data in the workout
                 Column(
                     modifier = Modifier.fillMaxSize(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    routineInfoRow(routineWithWorkout.routine)
-                    //Text(routineWithWorkout.routine.routineName)
+                    //This row displays the header for each card
+                    RoutineInfoRow(routineWithWorkout.routine)
+
+                    //Loop through the different routines separated by dates
                     for(workouts in routineWithWorkout.workouts){
                         Text(
                             modifier = Modifier
@@ -263,13 +89,18 @@ fun testing(state: WorkoutState, context: Context){
                             color = Color.White,
                             text = workouts.dayOfWorkout)
 
+                        //Uses labels from DaysOfWeek composables
                         labels()
 
+                        //Parse the workout data string into sets, reps, and weight blocks
                         parsedWorkouts(workouts.workoutInfo, state)
 
+                        //Loop through the workout info
                         state.workoutInfo.forEachIndexed{workoutIndex, workout ->
-                            var parsedWorkoutInfo = parsedWorkoutNames(workout, state)
+                            //divide the blocks of data "1,2,3" into "1","2","3"
+                            val parsedWorkoutInfo = parsedWorkoutNames(workout, state)
 
+                            //Composable from DaysOfWeekScreen, it just displays the data formatted
                             WorkoutInfo(
                                 parsedWorkouts[workoutIndex],
                                 parsedWorkoutInfo[0],
@@ -280,28 +111,31 @@ fun testing(state: WorkoutState, context: Context){
                         }
                     }
                 }
-
             }
             Spacer(modifier = Modifier.padding(bottom = 10.dp))
         }
+        item{ Spacer(modifier = Modifier.padding(bottom = 60.dp))}
     }
 }
 
+//Creates the routine header
 @Composable
-fun routineInfoRow(routine : Routine){
+fun RoutineInfoRow(routine : Routine){
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .background(color = lightBlue),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        routineNameTextCustomization("  " + routine.dayAssigned.lowercase())
-        routineNameTextCustomization(routine.routineName)
-        routineNameTextCustomization(routine.dayOfCreation + "  ")
+        RoutineNameTextCustomization("  " + routine.dayAssigned.lowercase())
+        RoutineNameTextCustomization(routine.routineName)
+        RoutineNameTextCustomization(routine.dayOfCreation + "  ")
     }
 }
+
+//A text format I liked that I had to use 3 times so I made a composable for it
 @Composable
-fun routineNameTextCustomization(text : String){
+fun RoutineNameTextCustomization(text : String){
     Text(
         modifier = Modifier.padding(top = 5.dp, bottom = 5.dp),
         fontSize = 15.sp,

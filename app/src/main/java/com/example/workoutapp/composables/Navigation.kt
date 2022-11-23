@@ -35,7 +35,7 @@ fun Navigation(state : WorkoutState, viewModel: WorkoutViewModel){
         }
         //Statistics page screen composable
         composable(route = Screen.StatsScreen.route){
-            StatsPageScaffold(navController, state, context)
+            StatsPageScaffold(navController, state)
         }
         //Settings page screen composable
         composable(route = Screen.SettingsScreen.route){
