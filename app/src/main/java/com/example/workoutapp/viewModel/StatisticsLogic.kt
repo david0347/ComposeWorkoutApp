@@ -14,13 +14,6 @@ suspend fun getRoutines(context : Context, state : WorkoutState){
     state.routinesList = dao.getAllRoutines()
 }
 
-//Function to get all workouts based on routine name and return them
-suspend fun getAllWorkouts(context : Context, state : WorkoutState, routineName : String){
-
-    var dao = RoutineDatabase.getInstance(context).routineDao
-     state.workoutsList = dao.getAllWorkoutsForRoutine(routineName)
-}
-
 //Sets state.routineWithWorkout to the joined routine and workout table
 suspend fun getRoutinesWithWorkouts(
     context : Context,

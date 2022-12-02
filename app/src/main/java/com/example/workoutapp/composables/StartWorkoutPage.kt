@@ -30,6 +30,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.max
 import com.example.workoutapp.routes.Screen
 import com.example.workoutapp.ui.theme.lightBlue
+import com.example.workoutapp.ui.theme.offWhite
 import com.example.workoutapp.viewModel.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -122,8 +123,14 @@ fun WorkoutList(state : WorkoutState, context: Context, navController : NavContr
                     },
                 contentAlignment = Alignment.Center
             ) {
-                Text("Add Workout")
+                Text(
+                    color = offWhite,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    text = "Add Workout"
+                )
             }
+            Spacer(modifier = Modifier.padding(100.dp))
         }
     }
 

@@ -14,6 +14,7 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -74,7 +75,14 @@ fun DayOfWeek(
                 }
             }
         }else{
-            Text(text = "Issues with day of week")
+            Text(modifier = Modifier
+                .fillMaxWidth(),
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Gray,
+                textAlign = TextAlign.Center,
+                text = "You have no previous data for " + dayOfWeekText(state).lowercase()
+            )
         }
     }
 }

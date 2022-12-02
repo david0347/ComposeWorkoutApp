@@ -51,7 +51,7 @@ fun HomePage(navController: NavController, state : WorkoutState, context: Contex
 
         Header(text = "Welcome Back!")
         //This message will change based on day of the week
-        DayOfWeekMessage(messageOfDay = "Today is rest day")
+        DayOfWeekMessage(messageOfDay = "Today is " + dayOfWeekText(state).lowercase())
         DaysOfWeekRow(navController, state, context = context)
         Spacer(Modifier.padding(top = 20.dp))
         ButtonBox(navController, context, state)
