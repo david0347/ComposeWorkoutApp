@@ -21,6 +21,7 @@ import androidx.navigation.NavController
 import com.example.workoutapp.routes.Screen
 import com.example.workoutapp.ui.theme.darkBlue
 import com.example.workoutapp.ui.theme.lightBlue
+import com.example.workoutapp.ui.theme.offWhite
 import com.example.workoutapp.viewModel.WorkoutState
 import com.example.workoutapp.viewModel.WorkoutViewModel
 import com.example.workoutapp.viewModel.addToDatabase
@@ -205,7 +206,12 @@ fun CreateRoutineButton(context : Context,
                 },
             contentAlignment = Alignment.Center
         ) {
-            Text("Add Routine")
+            Text(
+                color = offWhite,
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp,
+                text = "Add Routine"
+            )
         }
     }
 }

@@ -168,8 +168,10 @@ fun WorkoutCard(
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .border(3.dp, color = darkBlue),
+                    .border(3.dp, color = darkBlue)
+                    .background(color = lightBlue),
                 text = workoutName,
+                color = offWhite,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center
