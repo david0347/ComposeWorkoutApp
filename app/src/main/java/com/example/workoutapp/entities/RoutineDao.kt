@@ -30,6 +30,12 @@ interface RoutineDao {
     @Query("SELECT * FROM routine")
     suspend fun getAllRoutines() : MutableList<Routine>
 
+    @Query("SELECT COUNT(routineName) FROM workout where routineName = :routine")
+    suspend fun getWorkoutCountFromRoutine(routine : String) : Int
+
+    @Query("SELECT COUNT(routineName) FROM routine where dayAssigned = :dayOfWeek")
+    suspend fun getRoutineCountFromDayOfWeek(dayOfWeek: String) : Int
+
     //Query to get all workouts based on the routine name, returns list of Workout
     @Query("SELECT * FROM workout WHERE routineName = :routineName")
     suspend fun getAllWorkoutsForRoutine(routineName : String) : MutableList<Workout>

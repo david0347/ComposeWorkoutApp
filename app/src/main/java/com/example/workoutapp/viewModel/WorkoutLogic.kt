@@ -1,6 +1,7 @@
 package com.example.workoutapp.viewModel
 
 import android.content.Context
+import android.util.Log
 import com.example.workoutapp.RoutineDatabase
 import com.example.workoutapp.composables.WorkoutSegment
 import com.example.workoutapp.entities.Routine
@@ -149,9 +150,32 @@ suspend fun lastWorkoutDay(context : Context) : String{
     var lastDate = ""
 
     try {
+        //try getting last day of workout
         lastDate = dao.returnLastWorkout().dayOfWorkout
     }catch (e : Exception ){
-        lastDate = "00/00/0000"
+        try{
+            if(dao.getRoutineCountFromDayOfWeek(getWeekDay()) > 0){
+                Log.d("test", "error there")
+
+                return "null"
+            }else{
+                Log.d("test", "Error here")
+
+                return "00/00/0000"
+            }
+        }catch (e : Exception){
+            return "00/00/0000"
+        }
+
+        //Add to the if. This works if the table is empty and it is the correct day
+        //if not the correct day and table is empty it needs to return something different
+        //Check if table is empty and the day of the week matches the day of a routine
+        //then return null
+        //if(dao.countWorkout() == 0){
+          //  lastDate = "null"
+        //}else{
+
+        //}
     }
     return lastDate
 }
@@ -172,6 +196,10 @@ suspend fun hasWorkedOutToday(
         //When date = 00/00/0000 from a previous fail safe return true
         "00/00/0000" -> {
             state.hasWorkedOut = true
+        }
+        //If table is empty
+        "null" ->{
+            state.hasWorkedOut = false
         }
         //Else return false
         else -> {

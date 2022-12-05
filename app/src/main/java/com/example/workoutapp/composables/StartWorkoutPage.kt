@@ -54,8 +54,8 @@ fun startWorkoutPage(state : WorkoutState, context: Context, navController: NavC
     //Side Effect to run a function inside of a composable
     SideEffect {
         //Coroutine to run the function to utilize the database
-        GlobalScope.launch(Dispatchers.IO) { hasWorkedOutToday(context, state)
-        }
+        //GlobalScope.launch(Dispatchers.IO) { hasWorkedOutToday(context, state)
+        //}
     }
 
     //Column to hold the data

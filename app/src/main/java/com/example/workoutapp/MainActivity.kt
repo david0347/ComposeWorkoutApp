@@ -25,7 +25,7 @@ class MainActivity : ComponentActivity() {
             Routine("Back Day", "1/4/1", "THURSDAY", "deadlift,rows,pull ups"),
             Routine("Shoulder Day", "1/5/1", "FRIDAY", "military press,land mines,shoulder raise"),
             Routine("Rest Day 1", "1/5/1", "SATURDAY", "nothing,sleep in,eat breakfast"),
-            Routine("Rest Day 2", "1/5/1", "SUNDAY", "video games,sleep in,eat breakfast")
+            //Routine("Rest Day 2", "1/5/1", "SUNDAY", "video games,sleep in,eat breakfast")
         )
 
         val workouts = listOf(

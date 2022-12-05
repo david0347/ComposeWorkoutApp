@@ -214,13 +214,50 @@ fun ButtonBox(
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
         ){
-            MainButtons("Start Workout", navController, Screen.StartWorkoutScreen.route)
+            //Commented out MainButtons call is for buttons that needed a coroutine call when
+            //clicked on, before page load
+            //MainButtons("Start Workout", navController, Screen.StartWorkoutScreen.route)
+            StartWorkoutButton(buttonText = "Start Workout", navController =navController , context = context, state = state)
             MainButtons("Create New Routine", navController, Screen.CreateRouteScreen.route)
             //MainButtons("Edit Routine", navController, Screen.EditRoutineScreen.route)
             EditRoutineButton(buttonText = "Edit Routine", navController = navController, context = context, state = state)
             //MainButtons("Statistics", navController, Screen.StatsScreen.route)
             StatisticButton(buttonText = "Statistics", navController = navController, context = context, state = state)
         }
+    }
+}
+
+//Needed to move the hasWorkedOutToday call inside of the onclick function because this was
+//Also causing an error when it was on page load
+@Composable
+fun StartWorkoutButton(
+    buttonText: String,
+    navController: NavController,
+    context : Context,
+    state : WorkoutState
+){
+    Box(
+        modifier = Modifier
+            .fillMaxWidth(.7f)
+            .clip(RoundedCornerShape(15.dp))
+            .height(75.dp)
+            .background(lightBlue)
+            .border(width = 2.dp, color = darkBlue, shape = RoundedCornerShape(15.dp))
+            .clickable {
+                navController.navigate(Screen.StartWorkoutScreen.route)
+                GlobalScope.launch(Dispatchers.IO) {
+                    hasWorkedOutToday(context, state)
+                    getRoutinesWithWorkouts(context, state)
+                }
+            },
+        contentAlignment = Alignment.Center
+    ){
+        Text(
+            color = offWhite,
+            fontSize = 20.sp,
+            fontWeight = Bold,
+            text = buttonText
+        )
     }
 }
 
