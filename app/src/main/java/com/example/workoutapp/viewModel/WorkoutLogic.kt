@@ -153,11 +153,14 @@ suspend fun lastWorkoutDay(context : Context) : String{
         //try getting last day of workout
         lastDate = dao.returnLastWorkout().dayOfWorkout
     }catch (e : Exception ){
+        //Goes into another try catch block to try the other dao call
         try{
-            if(dao.getRoutineCountFromDayOfWeek(getWeekDay()) > 0){
+            //If there is a routine and it is the current day, return null, AKA false
+            if(dao.getRoutineFromDayOfWeek(getWeekDay()).dayAssigned == getWeekDay()){
                 Log.d("test", "error there")
 
                 return "null"
+                //else return "00/00/0000" AKA true
             }else{
                 Log.d("test", "Error here")
 
@@ -166,16 +169,6 @@ suspend fun lastWorkoutDay(context : Context) : String{
         }catch (e : Exception){
             return "00/00/0000"
         }
-
-        //Add to the if. This works if the table is empty and it is the correct day
-        //if not the correct day and table is empty it needs to return something different
-        //Check if table is empty and the day of the week matches the day of a routine
-        //then return null
-        //if(dao.countWorkout() == 0){
-          //  lastDate = "null"
-        //}else{
-
-        //}
     }
     return lastDate
 }

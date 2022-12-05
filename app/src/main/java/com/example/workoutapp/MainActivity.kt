@@ -17,7 +17,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val dao = RoutineDatabase.getInstance(this).routineDao
-
+/*
         val routines = listOf(
             Routine("Chest Day", "1/1/1", "MONDAY", "bench,Machine fly,dumbbell fly,push ups, dips, dumbbell bench"),
             Routine("Leg Day", "1/2/1", "TUESDAY", "squat,leg press,step ups"),
@@ -39,7 +39,7 @@ class MainActivity : ComponentActivity() {
             routines.forEach{dao.insertRoutine(it)}
             workouts.forEach{dao.insertWorkout(it)}
         }
-
+*/
         //Setting a single view model and state to be passed through
         setContent {
             //View Model to pass through navigation and the rest of the composables

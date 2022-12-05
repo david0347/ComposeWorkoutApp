@@ -12,4 +12,7 @@ suspend fun deleteRoutine(
 
     dao.deleteRoutineFromRoutineTable(state.routineName)
     dao.deleteRoutineFromWorkoutTable(state.routineName)
+
+    state.workouts = listOf()
+    state.workoutSegments = mutableListOf()
 }

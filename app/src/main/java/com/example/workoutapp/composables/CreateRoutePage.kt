@@ -127,7 +127,13 @@ fun dayOfWeekDropDown(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             textForDesc(string = "Set To A Day Of The Week")
-
+            Text(
+                textAlign = TextAlign.Center,
+                color = Color.LightGray,
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Bold,
+                text = "Example: monday"
+            )
             BasicTextField(
                 modifier = Modifier
                     .border(width = 3.dp, color = darkBlue, shape = RoundedCornerShape(5.dp))

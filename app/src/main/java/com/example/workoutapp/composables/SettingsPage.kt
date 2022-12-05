@@ -25,7 +25,11 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
+import androidx.room.Room
 import com.example.workoutapp.RoutineDatabase
+import com.example.workoutapp.entities.Routine
+import com.example.workoutapp.entities.Workout
+import com.example.workoutapp.entities.relations.RoutineWithWorkout
 import com.example.workoutapp.ui.theme.darkBlue
 import com.example.workoutapp.ui.theme.lightBlue
 import com.example.workoutapp.ui.theme.offWhite
@@ -109,6 +113,9 @@ fun deleteTable(context: Context, state: WorkoutState){
                     GlobalScope.launch(Dispatchers.IO) {
                         dao.deleteRoutine()
                         dao.deleteWorkout()
+                        //These two values must be reset in order to have statistics work
+                        state.workouts = listOf()
+                        state.workoutSegments = mutableListOf()
                     }
                 },
             contentAlignment = Alignment.Center
