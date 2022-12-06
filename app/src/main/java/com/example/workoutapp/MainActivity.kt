@@ -17,7 +17,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val dao = RoutineDatabase.getInstance(this).routineDao
-/*
+
+        //uncomment for starter data to test
+        /*
         val routines = listOf(
             Routine("Chest Day", "1/1/1", "MONDAY", "bench,Machine fly,dumbbell fly,push ups, dips, dumbbell bench"),
             Routine("Leg Day", "1/2/1", "TUESDAY", "squat,leg press,step ups"),
